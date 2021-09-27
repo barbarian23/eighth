@@ -1,0 +1,7 @@
+node_modules/
+eighth/dist/
+eighth/node_modules/
+package-lock.json
+release-builds
+dist
+eighth/*.xlsx

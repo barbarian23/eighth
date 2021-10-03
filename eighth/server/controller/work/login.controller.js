@@ -24,41 +24,45 @@ async function doLogin(username, password, socket, driver, driver2) {
 
         // select to username input & send username
         // let selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_UserName"; // need open comment
-        let selector = "#username";
+        let selector = "#txtUsername";
         await driver.$eval(selector, (el, value) => el.value = value, username);
 
         // select to password input & send password
         // selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_Password";// need open comment
-        selector = "#password";
+        selector = "#txtPassword";
         await driver.$eval(selector, (el, value) => el.value = value, password);
 
         // select to button login & click button
         // selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_LoginButton";// need open comment
-        selector = "#fm1 > section > button";
+        selector = "#btnLogin";
         await Promise.all([driver.click(selector)]);
 
         await timer(2000);
 
         //lấy ra một DOM - tương đương hàm document.querySelector()
-        let dataFromLoginSummarySpan = await driver.$$eval("body #ctl01 .page .main .failureNotification", spanData => spanData.map((span) => {
-            return span.innerHTML;
-        }));
-
-        if (dataFromLoginSummarySpan.length > 0) {
+        // check trường hợp login wrong
+        //khi mà alert sai password hiện lên
+        driver.on("dialog",async (dialog) => {
+            console.log(dialog.message());
+            await dialog.dismiss();
             socket.send(SOCKET_LOGIN_INCORRECT, { data: -1 });
-            return;
-        }
+        });
 
-       //focus vào trnag đang đăng nhập
-        await driver.bringToFront();
+        // let dataFromLoginSummarySpan = await driver.$$eval("body #ctl01 .page .main .failureNotification", spanData => spanData.map((span) => {
+        //     return span.innerHTML;
+        // }));
 
+        // if (dataFromLoginSummarySpan.length > 0) {
+        //     socket.send(SOCKET_LOGIN_INCORRECT, { data: -1 });
+        //     return;
+        // }
          //đi tới trang thông tin số
-        // await driver.goto(OTP_URL);
+        await driver.goto(OTP_URL);
         // wait to complete
 
-        await driver.evaluate("setInterval(()=>{document.querySelector('#passOTP')},500)");
+        await driver.evaluate("setInterval(()=>{document.querySelector('#txtOtp')},500)");
 
-        await driver.waitForFunction('document.querySelector("#passOTP") != null');
+        await driver.waitForFunction('document.querySelector("#txtOtp") != null');
 
         //await driver2.goto(OTP_URL);
 

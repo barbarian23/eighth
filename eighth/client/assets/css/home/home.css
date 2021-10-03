@@ -69,7 +69,7 @@ td{
 
 .input-add-div{
     width: 50%!important;
-    display: flex;
+    text-align: center;
     flex-wrap: nowrap;
     margin: 10px 0px 0px 0px;
 }

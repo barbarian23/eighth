@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import '../../assets/css/home/home.css';
+import '../../assets/css/home/home.style.css';
 import { TR_TYPE_TIME, TR_TYPE_SETUP } from "../../constants/home/home.constant";
 import { GET_LENGHT_LIST, GET_NUMBER_INFORMATION, SEND_NUMBER_TOSERVER, START_CRAWL_DATA } from "../../action/home/home.action";
 import { readFileExcel, createFileExcel } from "../../service/excel/excel.client.service";
 import { useSelector, useDispatch } from 'react-redux';
+import Checkbox from 'rc-checkbox';
+import '../../assets/css/home/rc-checkbox.css';
 
 export default function Home() {
     const [mTime, setMTime] = useState(0);
@@ -86,15 +89,11 @@ export default function Home() {
                 top: "20px",
                 fontSize: "36px",
                 fontWeight: "600"
-            }}>CAS VNPT TRA CỨU THÔNG TIN</div>
+            }}>TRA CỨU THÔNG TIN THUÊ BAO</div>
             {
                 !isTracking ?
                     <div>
                         <div className="crawl-login">
-                            <div className="input-add-div">
-                                <input className="input-add" type="number" min="1" max="60" defaultValue="1" placeholder={TR_TYPE_TIME} onChange={onInputTime} />
-                                <input className="input-add-button" type="button" value={TR_TYPE_SETUP} onClick={setUpTime} />
-                            </div>
                             <div id="crawl_login_file_input_up">
                                 {/* <img id="img_file_input" src='../assets/images/file.png' /> */}
                                 <label htmlFor="xlsx">Bấm vào đây để chọn tệp(excel)</label>
@@ -102,6 +101,176 @@ export default function Home() {
                                     id="xlsx" name="xlsx"
                                     accept="xlsx" onChange={readFile} />
                                 <span id="span_file_input_error"></span>
+                            </div>
+                            <div className="group-checkbox">
+                                <div className="flex-box">
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Tên thuê bao </p>
+                                    </div>
+
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Tỉnh </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex-box">
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>IMSI </p>
+                                    </div>
+
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Ngày sinh </p>
+                                    </div>
+                                </div>
+
+
+                                <div className="flex-box">
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Số GT </p>
+                                    </div>
+
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Ngày cấp </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex-box">
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Số PIN </p>
+                                    </div>
+
+
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Số PUK </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex-box">
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Số PIN2 </p>
+                                    </div>
+
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Số PUK2 </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex-box">
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Địa chỉ thường trú</p>
+                                    </div>
+
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Tài khoản chính</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex-box">
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Hạn sử dụng</p>
+                                    </div>
+
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Hạng hội viên</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex-box">
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                        // onChange={onChange}
+                                        /> <p>Nợ trước đó</p>
+                                    </div>
+
+
+                                </div>
+
+                                <div className="form-control">
+                                    <input
+                                        type="checkbox"
+                                        className="checkbox"
+                                        defaultChecked
+                                    // onChange={onChange}
+                                    /> <p>TBTT được tham gia KM</p>
+                                </div>
+                            </div>
+
+                            <div className="input-add-div">
+                                {/* <input className="input-add" type="number" min="1" max="60" defaultValue="1" placeholder={TR_TYPE_TIME} onChange={onInputTime} /> */}
+                                <input className="input-add-button" type="button" value={TR_TYPE_SETUP} onClick={setUpTime} />
                             </div>
                         </div>
                         {
@@ -143,7 +312,7 @@ export default function Home() {
                                 <text>Đang tra cứu tệp <span style={{ color: "green" }}>{nameFile}</span></text>
                             </div>
                             <div className="tracking-index-number-upper">
-                                <text style={{textAlign:"center"}}>Đang tra cứu tới số thứ {phoneNumberChecking.index}</text>
+                                <text style={{ textAlign: "center" }}>Đang tra cứu tới số thứ {phoneNumberChecking.index}</text>
                             </div>
                             <div className="tracking-index-number-bellow">
                                 <text>Hoàn thành {percentProcess(phoneNumberChecking.index, sumIndex)}%</text>

@@ -20,7 +20,7 @@ export const TR_TYPE_MONEY = "Nhập số tiền";
 export const TR_TYPE_ADD = "Thêm";
 
 export const TR_TYPE_TIME = "Nhập khoảng thời gian tra cứu (s)";
-export const TR_TYPE_SETUP = "Thiết lập";
+export const TR_TYPE_SETUP = "Tra cứu";
 
 export const sampleData = [
     {

@@ -1,35 +1,42 @@
 import React, { useState, useEffect } from "react";
 import '../../assets/css/home/home.css';
 import '../../assets/css/home/home.style.css';
-import { TR_TYPE_TIME, TR_TYPE_SETUP } from "../../constants/home/home.constant";
-import { GET_LENGHT_LIST, GET_NUMBER_INFORMATION, SEND_NUMBER_TOSERVER, START_CRAWL_DATA } from "../../action/home/home.action";
-import { readFileExcel, createFileExcel } from "../../service/excel/excel.client.service";
+import { TR_TYPE_SETUP } from "../../constants/home/home.constant";
+import { GET_LENGHT_LIST, START_CRAWL_DATA } from "../../action/home/home.action";
+import { readFileExcel } from "../../service/excel/excel.client.service";
 import { useSelector, useDispatch } from 'react-redux';
-import Checkbox from 'rc-checkbox';
 import '../../assets/css/home/rc-checkbox.css';
 
 export default function Home() {
-    const [mTime, setMTime] = useState(0);
+    const [mTime, setMTime] = useState(2);
     const [isTracking, setIsTracking] = useState(false);
     const [nameFile, setNameFile] = useState("");
     const [onBoarding, setOnBoarding] = useState(false);
+
+    const [trangthaigoidi, settrangthaigoidi] = useState(false);
+    const [trangthaigoiden, settrangthaigoiden] = useState(false);
+    const [tenthuebao, settenthuebao] = useState(false);
+    const [tinh, settinh] = useState(false);
+    const [IMSI, setIMSI] = useState(false);
+    const [ngaysinh, setngaysinh] = useState(false);
+    const [sogt, setsogt] = useState(false);
+    const [ngaycap, setngaycap] = useState(false);
+    const [sopin, setsopin] = useState(false);
+    const [sopuk, setsopuk] = useState(false);
+    const [sopin2, setsopin2] = useState(false);
+    const [sopuk2, setsopuk2] = useState(false);
+    const [dcthuongtru, setdcthuongtru] = useState(false);
+    const [taikhoanchinh, settaikhoanchinh] = useState(false);
+    const [hansudung, sethansudung] = useState(false);
+    const [hanghoivien, sethanghoivien] = useState(false);
+    const [notruocdo, setnotruocdo] = useState(false);
+    const [tbttkm, settbttkm] = useState(false);
+
     const dispatch = useDispatch();
     let listPhone = useSelector(state => state.home.listPhone);
     let phoneNumberChecking = useSelector(state => state.home.phoneNumberChecking);
     let sumIndex = useSelector(state => state.home.sumIndex);
     let isCrawlDone = useSelector(state => state.home.isCrawlDone);
-
-    // let listPhone = useSelector(state => state.home.listPhone);
-
-    // thay doi % hoan thien crawl 
-    // useEffect(() => {
-    //     console.log("current list phone", listPhone);
-    //     if (listPhone.length === 0) {
-    //         dispatch({ type: GET_LIST_PHONE, data: null });
-    //     }
-    //     // khoi tao interval - duy nhat 1 lan
-    //     dispatch({ type: SET_INTERVAL_PHONE });
-    // }, []);
 
     useEffect(() => {
         setIsTracking(!isCrawlDone);
@@ -56,8 +63,7 @@ export default function Home() {
                 }
                 if (index == (data.length - 1)) {
                     console.log("data - endoflist", item[0], " ", item[1], " listPhone", listPhone);
-                    dispatch({ type: START_CRAWL_DATA, data: { listPhone: listPhone, nameFile: nameFile.substring(0, nameFile.length - 5), time: mTime } });
-                    setOnBoarding(true);
+                    return;
                 }
             });
         });
@@ -66,16 +72,33 @@ export default function Home() {
         e.target.value = null;
     }
 
-    let onInputTime = (e) => {
-        setMTime(e.target.value);
-    }
-
-    let downloadFile = (e) => {
-        createFileExcel(sampleData);
-    }
-
-    let setUpTime = () => {
-        dispatch({ type: ADD_PHONE, data: { mTime: mTime } });
+    let sendDataToServer = () => {
+        dispatch({
+            type: START_CRAWL_DATA, data: {
+                listPhone: listPhone,
+                nameFile: nameFile.substring(0, nameFile.length - 5),
+                time: mTime,
+                trangthaigoidi: trangthaigoidi,
+                trangthaigoiden: trangthaigoiden,
+                tenthuebao: tenthuebao,
+                tinh: tinh,
+                IMSI: IMSI,
+                ngaysinh: ngaysinh,
+                sogt: sogt,
+                ngaycap: ngaycap,
+                sopin: sopin,
+                sopuk: sopuk,
+                sopin2: sopin2,
+                sopuk2: sopuk2,
+                dcthuongtru: dcthuongtru,
+                taikhoanchinh: taikhoanchinh,
+                hansudung: hansudung,
+                hanghoivien: hanghoivien,
+                notruocdo: notruocdo,
+                tbttkm: tbttkm
+            }
+        });
+        setOnBoarding(true);
     }
 
     let percentProcess = (index, sum) => {
@@ -109,7 +132,33 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                settrangthaigoidi(!trangthaigoidi);
+                                            }}
+                                        /> <p>Trạng thái gọi đi </p>
+                                    </div>
+
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                            onChange={() => {
+                                                settrangthaigoiden(!trangthaigoiden);
+                                            }}
+                                        /> <p>Trạng thái gọi đến </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex-box">
+                                    <div className="form-control">
+                                        <input
+                                            type="checkbox"
+                                            className="checkbox"
+                                            defaultChecked
+                                            onChange={() => {
+                                                settenthuebao(!tenthuebao);
+                                            }}
                                         /> <p>Tên thuê bao </p>
                                     </div>
 
@@ -118,7 +167,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                settinh(!tinh);
+                                            }}
                                         /> <p>Tỉnh </p>
                                     </div>
                                 </div>
@@ -129,7 +180,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                setIMSI(!IMSI);
+                                            }}
                                         /> <p>IMSI </p>
                                     </div>
 
@@ -138,11 +191,12 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                setngaysinh(!ngaysinh);
+                                            }}
                                         /> <p>Ngày sinh </p>
                                     </div>
                                 </div>
-
 
                                 <div className="flex-box">
                                     <div className="form-control">
@@ -150,7 +204,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                setsogt(!sogt);
+                                            }}
                                         /> <p>Số GT </p>
                                     </div>
 
@@ -159,7 +215,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                setngaycap(!ngaycap);
+                                            }}
                                         /> <p>Ngày cấp </p>
                                     </div>
                                 </div>
@@ -170,7 +228,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                setsopin(!sopin);
+                                            }}
                                         /> <p>Số PIN </p>
                                     </div>
 
@@ -180,7 +240,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                setsopuk(!sopuk);
+                                            }}
                                         /> <p>Số PUK </p>
                                     </div>
                                 </div>
@@ -191,7 +253,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                setsopin2(!sopin2);
+                                            }}
                                         /> <p>Số PIN2 </p>
                                     </div>
 
@@ -200,7 +264,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                setsopuk2(!sopuk2);
+                                            }}
                                         /> <p>Số PUK2 </p>
                                     </div>
                                 </div>
@@ -211,7 +277,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                setdcthuongtru(!dcthuongtru);
+                                            }}
                                         /> <p>Địa chỉ thường trú</p>
                                     </div>
 
@@ -220,7 +288,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                settaikhoanchinh(!taikhoanchinh);
+                                            }}
                                         /> <p>Tài khoản chính</p>
                                     </div>
                                 </div>
@@ -231,7 +301,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                sethansudung(!hansudung);
+                                            }}
                                         /> <p>Hạn sử dụng</p>
                                     </div>
 
@@ -240,7 +312,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                sethanghoivien(!hanghoivien);
+                                            }}
                                         /> <p>Hạng hội viên</p>
                                     </div>
                                 </div>
@@ -251,7 +325,9 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                        // onChange={onChange}
+                                            onChange={() => {
+                                                setnotruocdo(!notruocdo);
+                                            }}
                                         /> <p>Nợ trước đó</p>
                                     </div>
 
@@ -263,14 +339,16 @@ export default function Home() {
                                         type="checkbox"
                                         className="checkbox"
                                         defaultChecked
-                                    // onChange={onChange}
+                                        onChange={() => {
+                                            settbttkm(!tbttkm);
+                                        }}
                                     /> <p>TBTT được tham gia KM</p>
                                 </div>
                             </div>
 
                             <div className="input-add-div">
                                 {/* <input className="input-add" type="number" min="1" max="60" defaultValue="1" placeholder={TR_TYPE_TIME} onChange={onInputTime} /> */}
-                                <input className="input-add-button" type="button" value={TR_TYPE_SETUP} onClick={setUpTime} />
+                                <input className="input-add-button" type="button" value={TR_TYPE_SETUP} onClick={sendDataToServer} />
                             </div>
                         </div>
                         {

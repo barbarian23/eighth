@@ -31,6 +31,7 @@ export default function Home() {
     const [hanghoivien, sethanghoivien] = useState(false);
     const [notruocdo, setnotruocdo] = useState(false);
     const [tbttkm, settbttkm] = useState(false);
+    const [warning, setWarning] = useState(false);
 
     const dispatch = useDispatch();
     let listPhone = useSelector(state => state.home.listPhone);
@@ -73,32 +74,37 @@ export default function Home() {
     }
 
     let sendDataToServer = () => {
-        dispatch({
-            type: START_CRAWL_DATA, data: {
-                listPhone: listPhone,
-                nameFile: nameFile.substring(0, nameFile.length - 5),
-                time: mTime,
-                trangthaigoidi: trangthaigoidi,
-                trangthaigoiden: trangthaigoiden,
-                tenthuebao: tenthuebao,
-                tinh: tinh,
-                IMSI: IMSI,
-                ngaysinh: ngaysinh,
-                sogt: sogt,
-                ngaycap: ngaycap,
-                sopin: sopin,
-                sopuk: sopuk,
-                sopin2: sopin2,
-                sopuk2: sopuk2,
-                dcthuongtru: dcthuongtru,
-                taikhoanchinh: taikhoanchinh,
-                hansudung: hansudung,
-                hanghoivien: hanghoivien,
-                notruocdo: notruocdo,
-                tbttkm: tbttkm
-            }
-        });
-        setOnBoarding(true);
+        if (trangthaigoiden || trangthaigoidi) {
+            dispatch({
+                type: START_CRAWL_DATA, data: {
+                    listPhone: listPhone,
+                    nameFile: nameFile.substring(0, nameFile.length - 5),
+                    time: mTime,
+                    trangthaigoidi: trangthaigoidi,
+                    trangthaigoiden: trangthaigoiden,
+                    tenthuebao: tenthuebao,
+                    tinh: tinh,
+                    IMSI: IMSI,
+                    ngaysinh: ngaysinh,
+                    sogt: sogt,
+                    ngaycap: ngaycap,
+                    sopin: sopin,
+                    sopuk: sopuk,
+                    sopin2: sopin2,
+                    sopuk2: sopuk2,
+                    dcthuongtru: dcthuongtru,
+                    taikhoanchinh: taikhoanchinh,
+                    hansudung: hansudung,
+                    hanghoivien: hanghoivien,
+                    notruocdo: notruocdo,
+                    tbttkm: tbttkm
+                }
+            });
+            setOnBoarding(true);
+        } else {
+            setWarning(true);
+        }
+
     }
 
     let percentProcess = (index, sum) => {
@@ -132,8 +138,13 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                            onChange={() => {
-                                                settrangthaigoidi(!trangthaigoidi);
+                                            onChange={(event) => {
+                                                if(event.target.checked){
+                                                    settrangthaigoidi(true);
+                                                    setWarning(false);
+                                                }else{
+                                                    settrangthaigoidi(false);
+                                                }
                                             }}
                                         /> <p>Trạng thái gọi đi </p>
                                     </div>
@@ -143,8 +154,13 @@ export default function Home() {
                                             type="checkbox"
                                             className="checkbox"
                                             defaultChecked
-                                            onChange={() => {
-                                                settrangthaigoiden(!trangthaigoiden);
+                                            onChange={(event) => {
+                                                if(event.target.checked){
+                                                    settrangthaigoiden(true);
+                                                    setWarning(false);
+                                                }else{
+                                                    settrangthaigoiden(false);
+                                                }
                                             }}
                                         /> <p>Trạng thái gọi đến </p>
                                     </div>
@@ -361,6 +377,20 @@ export default function Home() {
                                     transform: 'translate(-50%, 10px)',
                                 }} className="tracking-index-number-upper">
                                     <text>Tra cứu thành công , tên tệp đã crawl là <span style={{ color: "green" }}>{nameFile}</span></text>
+                                </div>
+                                :
+                                null
+                        }
+                        {
+                            warning ?
+                                <div style={{
+                                    position: "absolute",
+                                    bottom: "10px",
+                                    left: "50%",
+                                    width: "100%",
+                                    transform: 'translate(-50%, 10px)',
+                                }} className="tracking-index-number-upper">
+                                    <text style={{ color: "red" }}>Cần chọn Trạng thái gọi đi/ Trạng thái gọi đến</text>
                                 </div>
                                 :
                                 null

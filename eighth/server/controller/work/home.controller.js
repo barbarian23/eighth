@@ -21,62 +21,174 @@ async function writeToXcell(worksheet, x, y, title, style) {
     // }
 }
 // do login
-async function doGetInfomation(line, numberPhone, index, month, worksheet, socket, driver, length, style) {
+async function doGetInfomation(line, numberPhone, index, options, month, worksheet, socket, driver, length, style) {
     try {
         console.log("numberPhone ", numberPhone, "month", month);
         // go to login url
         await driver.goto(HOME_URL);
 
-        let selector = "#txtSearch";
+        let selector = "#txtSoThueBao";
         await driver.$eval(selector, (el, value) => el.value = value, numberPhone);
 
-        // select to password input & send password
-        selector = "#month";
-        await driver.$eval(selector, (el, value) => el.value = value, month);
-
         // select to button search & click button
-        selector = "#Div_Param > div:nth-child(2) > div:nth-child(3) > button"; // need to update
+        selector = "#btTraCuu"; // need to update
         await Promise.all([driver.click(selector)]);//, driver.waitForNavigation({ waitUntil: 'load', timeout: 0 })]);
 
         await timer(2000);
 
+
         //lấy ra table result search - chỉ lấy phần row data
-        let resultHtml = await driver.$$eval("#tbody_td_207", spanData => spanData.map((span) => {
-            return span.innerHTML;
-        }));
-
-        console.log("dataFromTable is: ", resultHtml);
-
-        if (JSON.stringify(resultHtml) == JSON.stringify([""])) { //  table k co du lieu >> k them vao excel
-            // bo qua,k them du lieu vao excel
-            socket.send(SOCKET_WORKING_CRAWLED_ITEM_DATA, { index: index + 1, phone: numberPhone });
-            
-        } else {
-            //let listTdTag = getListTdInformation(resultHtml);
-            let listTdTag = getListTdInformation(resultHtml[0]);
-            console.log("index", index);
-            // crawl BTS_NAME
-            let btsName = getTdInformation(listTdTag[1]);
-            // crawl MATINH - important
-            let maTinh = getTdInformation(listTdTag[2]);
-            // crawl TOTAL_TKC - optional
-            let totalTKC = getTdInformation(listTdTag[3]);
-            // thêm data vao excel
-            writeToXcell(worksheet, line, 1, index, style); // STT
-            writeToXcell(worksheet, line, 2, numberPhone, style); // SDT
-            writeToXcell(worksheet, line, 3, btsName[0], style); // BTS_NAME
-            writeToXcell(worksheet, line, 4, maTinh[0], style); // MA_TINH
-            writeToXcell(worksheet, line, 5, totalTKC[0], style); // TOTAL_TKC
-            // gửi dữ liệu về client
-            // await socket.send(SOCKET_WORKING_CRAWLED_ITEM_DATA, { index:index, phone: numberPhone, btsName: btsName, maTinh: maTinh, totalTKC: totalTKC });
-            socket.send(SOCKET_WORKING_CRAWLED_ITEM_DATA, { index: index, phone: numberPhone });
-            // clearInterval(itemPhone.interval);
-            line++;
+        let col = 1;
+        writeToXcell(worksheet, line, col, index, style);
+        col += 1;
+        if (options.trangthaigoidi) {
+            writeToXcell(worksheet, line, col, "x", style);
+            col += 1;
         }
-        //đưa đoạn gửi tín hiệu thành công ra khỏi if else
-        // if (index == length) {
-        //     socket.send(SOCKET_CRAWLED_DONE, { data: 2 });
-        // }
+
+        if (options.trangthaigoiden) {
+            writeToXcell(worksheet, line, col, "x", style);
+            col += 1;
+        }
+
+        if (options.tenthuebao) {
+            let tenthuebao = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtTB", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, tenthuebao, style);
+            col += 1;
+        }
+
+        if (options.tinh) {
+            let tinh = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtTinh", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, tinh, style);
+            col += 1;
+        }
+
+        if (options.IMSI) {
+            let IMSI = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtIMSI", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, IMSI, style);
+            col += 1;
+        }
+
+        if (options.ngaysinh) {
+            let ngaysinh = await driver.$$eval("#ctl00$ContentPlaceHolder1$txtNgaySinh", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, ngaysinh, style);
+            col += 1;
+        }
+
+        if (options.sogt) {
+            let sogt = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtSoGT", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, sogt, style);
+            col += 1;
+        }
+
+        if (options.ngaycap) {
+            let ngaycap = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtNoiCap", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, ngaycap, style);
+            col += 1;
+        }
+
+        if (options.sopin) {
+            let sopin = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtPIN", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, sopin, style);
+            col += 1;
+        }
+
+        if (options.sopuk) {
+            let sopuk = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtPUK", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, sopuk, style);
+            col += 1;
+        }
+
+        if (options.sopin2) {
+            let sopin2 = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtPIN2", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, sopin2, style);
+            col += 1;
+        }
+
+        if (options.sopuk2) {
+            let sopuk2 = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtPUK2", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, sopuk2, style);
+            col += 1;
+        }
+
+        if (options.dcthuongtru) {
+            let dcthuongtru = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtDiaChiThuongTru", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, dcthuongtru, style);
+            col += 1;
+        }
+
+        if (options.taikhoanchinh) {
+            let taikhoanchinh = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtTKC", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, taikhoanchinh, style);
+            col += 1;
+        }
+
+        if (options.hansudung) {
+            let hansudung = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtHSD", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, hansudung, style);
+            col += 1;
+        }
+
+        if (options.hanghoivien) {
+            let hanghoivien = await driver.$$eval("#ctl00_ContentPlaceHolder1_lblHangHoiVien", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            writeToXcell(worksheet, line, col, hanghoivien, style);
+            col += 1;
+        }
+
+        if (options.notruocdo) {
+            let notruocdo = await driver.$$eval("#tblThongTinCuocTraSau", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            if (notruocdo != JSON.stringify([""])) {
+                let listTdTag = getListTdInformation(resultHtml[0]);
+                let no = getTdInformation(listTdTag[17]);
+                writeToXcell(worksheet, line, col, no, style);
+                col += 1;
+            }
+        }
+
+        if (options.tbttkm) {
+            let tbttkm = await driver.$$eval("#ctl00_ContentPlaceHolder1_txtKhuyenMai", spanData => spanData.map((span) => {
+                return JSON.stringify(span.innerHTML);
+            }));
+            if (tbttkm != JSON.stringify([""])) {
+                writeToXcell(worksheet, line, col, tbttkm, style);
+                col += 1;
+            }
+        }
+
+        // // gửi dữ liệu về client
+        socket.send(SOCKET_WORKING_CRAWLED_ITEM_DATA, { index: index, phone: numberPhone });
+        // clearInterval(itemPhone.interval);
+        line++;
         return line;
     } catch (e) {
         console.log("doGetInfomation error ", e);

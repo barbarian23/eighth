@@ -19,7 +19,7 @@ async function doOTPChecking(otp, socket, driver) {
 
         //khi mà dilaog sai otp hiện lên
         driver.on("dialog",async (dialog) => {
-            console.log(dialog.message());
+            console.log("alert otp",dialog.message());
             await dialog.dismiss();
             socket.send(SOCKET_OTP_STATUS, { data: 4 });
         });
@@ -32,23 +32,24 @@ async function doOTPChecking(otp, socket, driver) {
 
         //lấy ra một DOM - tương đương hàm document.querySelector()
         //need to update
-        let dataFromLoginSummarySpan = await driver.$$eval("#content > div.otp-form", spanData => spanData.map((span) => {
+        let dataFromLoginSummarySpan = await driver.$$eval("#ctl01 > div.wrap-body.wrap-confirmotp > div", spanData => spanData.map((span) => {
             return span.innerHTML;
         }));
 
         if (dataFromLoginSummarySpan.length > 0) {
+            console.log("dang xac thuc otp ", otp);
             let selector = "#txtOtp";
             await driver.$eval(selector, (el, value) => el.value = value, otp);
 
             // select to button login & click button
             //check xem hiện tại otp đã bị timoue hay chưa
             selector = "#btnProcess";
-            await Promise.all([driver.click(selector), driver.waitForNavigation({ waitUntil: 'load', timeout: 0 })]);
+            await Promise.all([driver.click(selector), driver.waitForNavigation({timeout: '61000' })]);
 
             await timer(2000);
 
             //đi tới trang thông tin số
-            // await driver.goto(HOME_URL);
+            //await driver.goto(HOME_URL);
 
             // wait to complete
             // maybe need to update

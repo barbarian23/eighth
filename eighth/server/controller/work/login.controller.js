@@ -35,15 +35,15 @@ async function doLogin(username, password, socket, driver, driver2) {
         // select to button login & click button
         // selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_LoginButton";// need open comment
         selector = "#btnLogin";
-        await Promise.all([driver.click(selector)]);
+        await Promise.all([driver.click(selector), driver.waitForNavigation({ timeout: '61000' })]);
 
         await timer(2000);
 
         //lấy ra một DOM - tương đương hàm document.querySelector()
         // check trường hợp login wrong
         //khi mà alert sai password hiện lên
-        driver.on("dialog",async (dialog) => {
-            console.log(dialog.message());
+        driver.on("dialog", async (dialog) => {
+            console.log("alert login", dialog.message());
             await dialog.dismiss();
             socket.send(SOCKET_LOGIN_INCORRECT, { data: -1 });
         });
@@ -56,8 +56,8 @@ async function doLogin(username, password, socket, driver, driver2) {
         //     socket.send(SOCKET_LOGIN_INCORRECT, { data: -1 });
         //     return;
         // }
-         //đi tới trang thông tin số
-        await driver.goto(OTP_URL);
+        //đi tới trang thông tin số
+        //await driver.goto(OTP_URL);
         // wait to complete
 
         await driver.evaluate("setInterval(()=>{document.querySelector('#txtOtp')},500)");

@@ -1,38 +1,38 @@
 import React, { useState, useEffect } from "react";
 import '../../assets/css/home/home.css';
 import '../../assets/css/home/home.style.css';
-import { TR_TYPE_SETUP } from "../../constants/home/home.constant";
+import { TR_TYPE_SETUP, TR_TYPE_TIME } from "../../constants/home/home.constant";
 import { GET_LENGHT_LIST, START_CRAWL_DATA } from "../../action/home/home.action";
 import { readFileExcel } from "../../service/excel/excel.client.service";
 import { useSelector, useDispatch } from 'react-redux';
 import '../../assets/css/home/rc-checkbox.css';
 
 export default function Home() {
-    const [mTime, setMTime] = useState(2);
+    const [mTime, setMTime] = useState(6);
     const [isTracking, setIsTracking] = useState(false);
     const [nameFile, setNameFile] = useState("");
     const [onBoarding, setOnBoarding] = useState(false);
 
-    const [trangthaigoidi, settrangthaigoidi] = useState(false);
-    const [trangthaigoiden, settrangthaigoiden] = useState(false);
-    const [tenthuebao, settenthuebao] = useState(false);
-    const [tinh, settinh] = useState(false);
-    const [IMSI, setIMSI] = useState(false);
-    const [ngaysinh, setngaysinh] = useState(false);
-    const [sogt, setsogt] = useState(false);
-    const [ngaycap, setngaycap] = useState(false);
-    const [sopin, setsopin] = useState(false);
-    const [sopuk, setsopuk] = useState(false);
-    const [sopin2, setsopin2] = useState(false);
-    const [sopuk2, setsopuk2] = useState(false);
-    const [dcthuongtru, setdcthuongtru] = useState(false);
-    const [taikhoanchinh, settaikhoanchinh] = useState(false);
-    const [hansudung, sethansudung] = useState(false);
-    const [hanghoivien, sethanghoivien] = useState(false);
-    const [notruocdo, setnotruocdo] = useState(false);
-    const [tbttkm, settbttkm] = useState(false);
+    const [trangthaigoidi, settrangthaigoidi] = useState(true);
+    const [trangthaigoiden, settrangthaigoiden] = useState(true);
+    const [tenthuebao, settenthuebao] = useState(true);
+    const [tinh, settinh] = useState(true);
+    const [IMSI, setIMSI] = useState(true);
+    const [ngaysinh, setngaysinh] = useState(true);
+    const [sogt, setsogt] = useState(true);
+    const [ngaycap, setngaycap] = useState(true);
+    const [sopin, setsopin] = useState(true);
+    const [sopuk, setsopuk] = useState(true);
+    const [sopin2, setsopin2] = useState(true);
+    const [sopuk2, setsopuk2] = useState(true);
+    const [dcthuongtru, setdcthuongtru] = useState(true);
+    const [taikhoanchinh, settaikhoanchinh] = useState(true);
+    const [hansudung, sethansudung] = useState(true);
+    const [hanghoivien, sethanghoivien] = useState(true);
+    const [notruocdo, setnotruocdo] = useState(true);
+    const [tbttkm, settbttkm] = useState(true);
     const [warning, setWarning] = useState(false);
-
+    
     const dispatch = useDispatch();
     let listPhone = useSelector(state => state.home.listPhone);
     let phoneNumberChecking = useSelector(state => state.home.phoneNumberChecking);
@@ -73,7 +73,13 @@ export default function Home() {
         e.target.value = null;
     }
 
+    let onInputTime = (e) => {
+        setMTime(e.target.value);
+    }
+
     let sendDataToServer = () => {
+        console.log(trangthaigoiden);
+        console.log(trangthaigoidi);
         if (trangthaigoiden || trangthaigoidi) {
             dispatch({
                 type: START_CRAWL_DATA, data: {
@@ -363,7 +369,7 @@ export default function Home() {
                             </div>
 
                             <div className="input-add-div">
-                                {/* <input className="input-add" type="number" min="1" max="60" defaultValue="1" placeholder={TR_TYPE_TIME} onChange={onInputTime} /> */}
+                                <input className="input-add" type="number" min="1" max="60" defaultValue="6" placeholder={TR_TYPE_TIME} onChange={onInputTime} />
                                 <input className="input-add-button" type="button" value={TR_TYPE_SETUP} onClick={sendDataToServer} />
                             </div>
                         </div>

@@ -28,7 +28,7 @@ input[type='checkbox']{
     -o-appearance: none;
     appearance: none;
     background: white;
-    border: 1px solid #ba68c8;
+    border: 1px solid #4dd0e1;
     /* filter: invert(100%) hue-rotate(18deg) brightness(2); */
 }
 
@@ -37,7 +37,7 @@ input[type='checkbox']:blank{
 }
 
 input[type='checkbox']:checked{
-    background: #ba68c8;
+    background: #4dd0e1;
 }
 
 input[type='checkbox']:checked:after {

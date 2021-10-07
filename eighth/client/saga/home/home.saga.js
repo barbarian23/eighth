@@ -38,6 +38,7 @@ const startCrawlDataSocket = function (data) {
 // Nhận kết quả từ socket
 const startCrawlData = function* (action) {
     //lay vee fkeest quar cuar event channel redux
+    console.log("startCrawlData",action);
     let result = yield call(startCrawlDataSocket, action);
     yield put({
         type: GET_NUMBER_INFORMATION_SUCCESS,

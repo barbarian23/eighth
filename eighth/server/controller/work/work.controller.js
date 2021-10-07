@@ -14,7 +14,7 @@ import { forEach } from "lodash";
 const puppeteer = require('puppeteer');
 //C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe
 //C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
-let exPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
+let exPath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 var driver, browser;
 
 //puppeteer
@@ -24,7 +24,7 @@ var excel = require('excel4node');
 var wb, ws;
 var fileName;
 var THRESLDHOLD = 50;
-const MIN_TIME = 2000;
+const MIN_TIME = 6000;
 var line = 2;//bỏ qua header và excel abwts đầu từ một
 
 const preparePuppteer = function () {
@@ -32,7 +32,7 @@ const preparePuppteer = function () {
         try {
             let browser = await puppeteer.launch({
                 args: ["--no-sandbox", "--proxy-server='direct://'", '--proxy-bypass-list=*'],
-                headless: true,
+                headless: false,
                 ignoreHTTPSErrors: true,
                 executablePath: exPath == "" ? "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe" : exPath
             })

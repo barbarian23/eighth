@@ -23,9 +23,12 @@ async function writeToXcell(worksheet, x, y, title, style) {
 // do login
 async function doGetInfomation(line, numberPhone, index, options, month, worksheet, socket, driver, length, style) {
     try {
-        console.log("numberPhone ", numberPhone, "month", month);
+        console.log("numberPhone ", numberPhone);
         // go to login url
         await driver.goto(HOME_URL);
+
+        await driver.waitForFunction('document.readyState === "complete"');
+
 
         let selector = "#txtSoThueBao";
         await driver.$eval(selector, (el, value) => el.value = value, numberPhone);

@@ -10,6 +10,7 @@ function socketClient(url) {
             });
         },
         send: function (type, data) {
+            console.log("send type ",type, " ", data)
             socketClient.instance.emit(type, data);
         }
     }

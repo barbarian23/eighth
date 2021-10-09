@@ -12,6 +12,7 @@ export default function Home() {
     const [isTracking, setIsTracking] = useState(false);
     const [nameFile, setNameFile] = useState("");
     const [onBoarding, setOnBoarding] = useState(false);
+    const [notchooseFile, setNotChooseFile] =useState(true);
 
     const [trangthaigoidi, settrangthaigoidi] = useState(true);
     const [trangthaigoiden, settrangthaigoiden] = useState(true);
@@ -45,10 +46,11 @@ export default function Home() {
 
     let readFile = (e) => {
         // console.log("name file is ", e.target.files[0].name);
+        console.log("read file")
         let nameFile = e.target.files[0].name;
         setNameFile(nameFile);
+        setNotChooseFile(true);
         readFileExcel(e.target.files[0], (data) => {
-            setIsTracking(true);
             //data là mảng chứa danh sách thuê bao và số tiền
             dispatch({ type: GET_LENGHT_LIST, data: { sumIndex: data.length } });
             data.forEach((item, index) => {
@@ -81,6 +83,7 @@ export default function Home() {
         console.log(trangthaigoiden);
         console.log(trangthaigoidi);
         if (trangthaigoiden || trangthaigoidi) {
+            setIsTracking(true);
             dispatch({
                 type: START_CRAWL_DATA, data: {
                     listPhone: listPhone,
@@ -131,7 +134,13 @@ export default function Home() {
                         <div className="crawl-login">
                             <div id="crawl_login_file_input_up">
                                 {/* <img id="img_file_input" src='../assets/images/file.png' /> */}
-                                <label htmlFor="xlsx">Bấm vào đây để chọn tệp(excel)</label>
+                                {
+                                    notchooseFile?
+                                    <label htmlFor="xlsx">Bấm vào đây để chọn tệp(excel)</label>
+                                    :
+                                    <label htmlFor="xlsx">Tệp đã chọn là {nameFile}</label>
+                                }
+                                
                                 <input type="file"
                                     id="xlsx" name="xlsx"
                                     accept="xlsx" onChange={readFile} />
@@ -382,7 +391,7 @@ export default function Home() {
                                     width: "100%",
                                     transform: 'translate(-50%, 10px)',
                                 }} className="tracking-index-number-upper">
-                                    <text>Tra cứu thành công , tên tệp đã crawl là <span style={{ color: "green" }}>{nameFile}</span></text>
+                                    <p>Tra cứu thành công, tên tệp đã crawl là <span style={{ color: "green" }}>{nameFile}</span></p>
                                 </div>
                                 :
                                 null
@@ -396,7 +405,7 @@ export default function Home() {
                                     width: "100%",
                                     transform: 'translate(-50%, 10px)',
                                 }} className="tracking-index-number-upper">
-                                    <text style={{ color: "red" }}>Cần chọn Trạng thái gọi đi/ Trạng thái gọi đến</text>
+                                    <p style={{ color: "red" }}>Cần chọn Trạng thái gọi đi/ Trạng thái gọi đến</p>
                                 </div>
                                 :
                                 null
@@ -423,13 +432,13 @@ export default function Home() {
 
                         <div>
                             <div className="tracking-index-number-upper">
-                                <text>Đang tra cứu tệp <span style={{ color: "green" }}>{nameFile}</span></text>
+                                <p>Đang tra cứu tệp <span style={{ color: "green" }}>{nameFile}</span></p>
                             </div>
                             <div className="tracking-index-number-upper">
-                                <text style={{ textAlign: "center" }}>Đang tra cứu tới số thứ {phoneNumberChecking.index}</text>
+                                <p style={{ textAlign: "center" }}>Đang tra cứu tới số thứ {phoneNumberChecking.index}</p>
                             </div>
                             <div className="tracking-index-number-bellow">
-                                <text>Hoàn thành {percentProcess(phoneNumberChecking.index, sumIndex)}%</text>
+                                <p>Hoàn thành {percentProcess(phoneNumberChecking.index, sumIndex)}%</p>
                             </div>
                         </div>
 

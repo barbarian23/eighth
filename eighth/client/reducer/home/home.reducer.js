@@ -34,6 +34,7 @@ export default function homeReducer(state = initialState, action) {
             return {
                 ...state,
                 listPhone: tempList,
+                data: action.data
             }
         // nhan reponse tu server
         // nhan ve: index, phone da crawl xong tu server

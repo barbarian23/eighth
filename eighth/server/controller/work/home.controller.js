@@ -1,5 +1,5 @@
 import { HOME_URL } from "../../constants/work/work.constants";
-import { SOCKET_WORKING_CRAWLED_ITEM_DATA, SOCKET_CRAWLED_DONE } from "../../../common/constants/common.constants";
+import { SOCKET_WORKING_CRAWLED_ITEM_DATA } from "../../../common/constants/common.constants";
 import { getListTdInformation, getTdInformation } from "../../service/util/utils.server";
 const DEFAULT_DELAY = 2000;
 

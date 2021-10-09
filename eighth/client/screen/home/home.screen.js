@@ -12,7 +12,7 @@ export default function Home() {
     const [isTracking, setIsTracking] = useState(false);
     const [nameFile, setNameFile] = useState("");
     const [onBoarding, setOnBoarding] = useState(false);
-    const [notchooseFile, setNotChooseFile] =useState(true);
+    const [chooseFile, setChooseFile] = useState(false);
 
     const [trangthaigoidi, settrangthaigoidi] = useState(true);
     const [trangthaigoiden, settrangthaigoiden] = useState(true);
@@ -33,7 +33,7 @@ export default function Home() {
     const [notruocdo, setnotruocdo] = useState(true);
     const [tbttkm, settbttkm] = useState(true);
     const [warning, setWarning] = useState(false);
-    
+
     const dispatch = useDispatch();
     let listPhone = useSelector(state => state.home.listPhone);
     let phoneNumberChecking = useSelector(state => state.home.phoneNumberChecking);
@@ -49,7 +49,8 @@ export default function Home() {
         console.log("read file")
         let nameFile = e.target.files[0].name;
         setNameFile(nameFile);
-        setNotChooseFile(true);
+        setChooseFile(true);
+        listPhone = [];
         readFileExcel(e.target.files[0], (data) => {
             //data là mảng chứa danh sách thuê bao và số tiền
             dispatch({ type: GET_LENGHT_LIST, data: { sumIndex: data.length } });
@@ -135,12 +136,12 @@ export default function Home() {
                             <div id="crawl_login_file_input_up">
                                 {/* <img id="img_file_input" src='../assets/images/file.png' /> */}
                                 {
-                                    notchooseFile?
-                                    <label htmlFor="xlsx">Bấm vào đây để chọn tệp(excel)</label>
-                                    :
-                                    <label htmlFor="xlsx">Tệp đã chọn là {nameFile}</label>
+                                    !chooseFile ?
+                                        <label htmlFor="xlsx">Bấm vào đây để chọn tệp(excel)</label>
+                                        :
+                                        <label htmlFor="xlsx">Tệp đã chọn là {nameFile}</label>
                                 }
-                                
+
                                 <input type="file"
                                     id="xlsx" name="xlsx"
                                     accept="xlsx" onChange={readFile} />
@@ -154,10 +155,10 @@ export default function Home() {
                                             className="checkbox"
                                             defaultChecked
                                             onChange={(event) => {
-                                                if(event.target.checked){
+                                                if (event.target.checked) {
                                                     settrangthaigoidi(true);
                                                     setWarning(false);
-                                                }else{
+                                                } else {
                                                     settrangthaigoidi(false);
                                                 }
                                             }}
@@ -170,10 +171,10 @@ export default function Home() {
                                             className="checkbox"
                                             defaultChecked
                                             onChange={(event) => {
-                                                if(event.target.checked){
+                                                if (event.target.checked) {
                                                     settrangthaigoiden(true);
                                                     setWarning(false);
-                                                }else{
+                                                } else {
                                                     settrangthaigoiden(false);
                                                 }
                                             }}

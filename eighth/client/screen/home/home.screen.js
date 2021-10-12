@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import '../../assets/css/home/home.css';
 import '../../assets/css/home/home.style.css';
 import { TR_TYPE_SETUP, TR_TYPE_TIME } from "../../constants/home/home.constant";
-import { GET_LENGHT_LIST, START_CRAWL_DATA } from "../../action/home/home.action";
+import { GET_LENGHT_LIST, START_CRAWL_DATA, SET_LIST_PHONE } from "../../action/home/home.action";
 import { readFileExcel } from "../../service/excel/excel.client.service";
 import { useSelector, useDispatch } from 'react-redux';
 import '../../assets/css/home/rc-checkbox.css';
@@ -50,7 +50,7 @@ export default function Home() {
         let nameFile = e.target.files[0].name;
         setNameFile(nameFile);
         setChooseFile(true);
-        listPhone = [];
+        let tlistPhone = [];
         readFileExcel(e.target.files[0], (data) => {
             //data là mảng chứa danh sách thuê bao và số tiền
             dispatch({ type: GET_LENGHT_LIST, data: { sumIndex: data.length } });
@@ -63,10 +63,12 @@ export default function Home() {
                         index: index,
                         phone: item[0]
                     }
-                    listPhone.push(itemPhone);
+                    tlistPhone.push(itemPhone);
                 }
                 if (index == (data.length - 1)) {
-                    console.log("data - endoflist", item[0], " ", item[1], " listPhone", listPhone);
+                    console.log("data - endoflist", item[0], " ", item[1], " listPhone", tlistPhone);
+                    //pay quên chưa đẩy list phone vào reducer, nên lần đầu khi bấm tra cứu thì danh sách ;lít phone bị rỗng
+                    dispatch({ type: SET_LIST_PHONE, data: { listPhone: tlistPhone } });
                     return;
                 }
             });

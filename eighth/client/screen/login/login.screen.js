@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import '../../assets/css/login/login.css';
 import { useHistory } from 'react-router-dom';
 import { loginConstant } from '../../constants/login/login.constant';
@@ -9,15 +9,15 @@ export default function login(props) {
 
     let dispatch = useDispatch();
 
-    let username = "";
-    let password = "";
+    const [username, setusername] = useState("");
+    const [password, setpassword] = useState("");
 
     let updateUsername = (e) => {
-        username = e.target.value;
+        setusername(e.target.value);
     }
 
     let updatePassword = (e) => {
-        password = e.target.value;
+        setpassword(e.target.value);
     }
 
     let dispatchToStore = (action) => {

@@ -3,6 +3,7 @@ import {
     GET_NUMBER_INFORMATION,
     GET_NUMBER_INFORMATION_SUCCESS,
     START_CRAWL_DATA,
+    SET_LIST_PHONE
 } from '../../action/home/home.action';
 
 const initialState = {
@@ -53,6 +54,12 @@ export default function homeReducer(state = initialState, action) {
                 ...state,
                 isCrawlDone: action.data,
                 listPhone: []
+            }
+            //thêm action set list phone
+        case SET_LIST_PHONE:
+            return{
+                ...state,
+                listPhone:  [...action.data.listPhone],
             }
         default:
             return {

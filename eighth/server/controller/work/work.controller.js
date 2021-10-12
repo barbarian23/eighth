@@ -14,7 +14,7 @@ import { forEach } from "lodash";
 const puppeteer = require('puppeteer');
 //C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe
 //C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
-let exPath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+let exPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
 var driver, browser;
 
 //puppeteer
@@ -110,10 +110,15 @@ const doGetInfor = async function (data) { // crawl data in table
                 size: 12,
             },
         });
+        //chekc xem line có bị undefined hay không
+        line = line ? line : 2;
+        let dOption = {...data.data};
         for (let index = 0; index < data.listPhone.length; index++) {
-            console.log("Tra cuu so thu ", index, " phone ", data.listPhone[index]);
+            console.log("Tra cuu so thu ", index, " phone ", data.listPhone[index], "line", line);
             let today = new Date();
-            let tempLine = await doGetInfomation(line, data.listPhone[index].phone, data.listPhone[index].index, data, today.getFullYear() + '-' + (today.getMonth() + 1), ws, socket, driver, data.listPhone.length, style);
+            //option nằm trong data.data
+
+            let tempLine = await doGetInfomation(line, data.listPhone[index].phone, data.listPhone[index].index, dOption, today.getFullYear() + '-' + (today.getMonth() + 1), ws, socket, driver, data.listPhone.length, style);
             line = tempLine;
             await timer(mTime);
             //cứ 50 só một lần, ghi lại vào file excel
@@ -151,8 +156,9 @@ async function writeHeader(wb, ws, options) {
             },
         });
 
-        let col = 1;
         ws.cell(1, 1).string("STT").style(style);
+        ws.cell(1, 2).string("Số điện thoại").style(style);
+        let col = 2;
         col += 1;
         if (options.trangthaigoidi) {
             ws.cell(1, col).string("Trạng thái gọi đi").style(style);
@@ -261,9 +267,9 @@ const createFileExcel = function (data) {
         ws.column(4).setWidth(30);//MA_TINH,
         ws.column(5).setWidth(30);//TOTAL_TKC
 
-        writeHeader(wb, ws, data);
+        writeHeader(wb, ws, data.data);
         let today = new Date();
-        fileName = data.nameFile + "_" + "Ngay " + today.getDate() + " Thang " + (today.getMonth() + 1) + " Nam " + today.getFullYear() + "_" + today.getHours() + " Gio " + today.getMinutes() + " Phut.xlsx";
+        fileName = data.nameFile + "_" + "Ngay " + today.getDate() + " Thang " + (today.getMonth() + 1) + " Nam " + today.getFullYear() + "_" + today.getHours() + " Gio " + today.getMinutes() + " Phut-" + today.getTime() + ".xlsx";
         wb.write(fileName);
 
     } catch (e) {

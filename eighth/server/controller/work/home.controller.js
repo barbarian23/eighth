@@ -303,6 +303,8 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         return line;
     } catch (e) {
         console.log("doGetInfomation error ", e);
+        line++;
+        return line;
     }
 }
 export default doGetInfomation;

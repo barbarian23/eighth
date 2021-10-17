@@ -54,7 +54,7 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
 
         //đợi cho đến khi iframe load xong data - là iframe đã load xong
 
-        await driver.waitForFunction('document.querySelector("#divIframe iframe") != null');
+        await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.readyState == "complete"');
 
         //cách lấy value trong iframe , thực thi hàm sau
         // let iframe = document.querySelector("#divIframe iframe");

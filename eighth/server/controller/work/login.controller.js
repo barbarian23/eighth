@@ -20,7 +20,7 @@ async function doLogin(username, password, socket, driver, driver2) {
         await driver.goto(LOGIN_URL);
 
         // wait to complete
-        // await driver.waitForFunction('document.readyState === "complete"'); // need open comment
+        //await driver.waitForFunction('document.readyState === "complete"'); // need open comment
 
         // select to username input & send username
         // let selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_UserName"; // need open comment

@@ -42,11 +42,12 @@ async function doLogin(username, password, socket, driver, driver2) {
         //lấy ra một DOM - tương đương hàm document.querySelector()
         // check trường hợp login wrong
         //khi mà alert sai password hiện lên
-        driver.on("dialog", async (dialog) => {
-            console.log("alert login", dialog.message());
-            await dialog.dismiss();
-            socket.send(SOCKET_LOGIN_INCORRECT, { data: -1 });
-        });
+
+        // driver.on("dialog", async (dialog) => {
+        //     console.log("alert login", dialog.message());
+        //     await dialog.dismiss();
+        //     socket.send(SOCKET_LOGIN_INCORRECT, { data: -1 });
+        // });
 
         // let dataFromLoginSummarySpan = await driver.$$eval("body #ctl01 .page .main .failureNotification", spanData => spanData.map((span) => {
         //     return span.innerHTML;

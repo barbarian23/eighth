@@ -50,7 +50,7 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         selector = "#btTraCuu"; // need to update
         await Promise.all([driver.click(selector)]);//, driver.waitForNavigation({ timeout: '61000' })
 
-        await timer(2000);
+        //await timer(2000);
 
         //đợi cho đến khi iframe load xong data - là iframe đã load xong
 
@@ -59,6 +59,9 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         //cách lấy value trong iframe , thực thi hàm sau
         // let iframe = document.querySelector("#divIframe iframe");
         // return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTinh");
+
+        //đợi cho thanh laoding laod xong -> sẽ trở về trang thái display = none
+        await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#divLoading").style.display == "none"');
 
         //lấy ra table result search - chỉ lấy phần row data
 
@@ -232,6 +235,8 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
             writeToXcell(worksheet, line, col, hansudung, style);
             col += 1;
         }
+
+        await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTKC").innerHTML != "..."');
 
         if (options.hanghoivien) {
             let hanghoivien = await driver.evaluate('function getE(){' +

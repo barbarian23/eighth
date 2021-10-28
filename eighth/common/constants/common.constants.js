@@ -12,6 +12,7 @@ export const SOCKET_CHANGE_MONEY = "change-money";
 export const SOCKET_LOG = "log";
 export const SOCKET_LOGIN_INCORRECT = "SOCKET_LOGIN_INCORRECT";
 export const SOCKET_SOMETHING_ERROR = "SOCKET_SOMETHING_ERROR";
+export const SOCKET_LOGIN_GO_HOME = "SOCKET_LOGIN_GO_HOME";
 
 /////////////////
 export const SOCKET_OTP = "SOCKET_OTP";

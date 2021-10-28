@@ -1,9 +1,10 @@
-import { OPEN_OTP_SCREEN, LOGIN_ERROR, LOGGINGIN } from '../../action/login/login.action';
+import { OPEN_OTP_SCREEN, LOGIN_ERROR, LOGGINGIN, GO_TO_HOME } from '../../action/login/login.action';
 
 const initialState = {
     logginin: false,
     isSomethingError: false,
     isLoginSuccess: false,
+    isGoHome: false,
     username: "",
     password: "",
     loginStatusText: "Đang đăng nhập",
@@ -25,6 +26,11 @@ export default function loginReducer(state = initialState, action) {
             return {
                 ...state,
                 isLoginSuccess: true
+            }
+        case GO_TO_HOME:
+            return {
+                ...state,
+                isGoHome: true
             }
         case LOGIN_ERROR:
             return {

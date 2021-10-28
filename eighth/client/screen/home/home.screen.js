@@ -32,6 +32,7 @@ export default function Home() {
     const [hanghoivien, sethanghoivien] = useState(true);
     const [notruocdo, setnotruocdo] = useState(true);
     const [tbttkm, settbttkm] = useState(true);
+    const [tieudung3thang, settieudung3thang] = useState(true);
     const [warning, setWarning] = useState(false);
 
     const dispatch = useDispatch();
@@ -109,7 +110,8 @@ export default function Home() {
                     hansudung: hansudung,
                     hanghoivien: hanghoivien,
                     notruocdo: notruocdo,
-                    tbttkm: tbttkm
+                    tbttkm: tbttkm,
+                    tieudung3thang: tieudung3thang,
                 }
             });
             setOnBoarding(true);
@@ -378,6 +380,17 @@ export default function Home() {
                                         }}
                                     /> <p>TBTT được tham gia KM</p>
                                 </div>
+
+                                <div className="form-control">
+                                    <input
+                                        type="checkbox"
+                                        className="checkbox"
+                                        defaultChecked
+                                        onChange={() => {
+                                            settieudung3thang(!tieudung3thang);
+                                        }}
+                                    /> <p>Tiêu dùng 3 tháng</p>
+                                </div>
                             </div>
 
                             <div className="input-add-div">
@@ -394,7 +407,7 @@ export default function Home() {
                                     width: "100%",
                                     transform: 'translate(-50%, 10px)',
                                 }} className="tracking-index-number-upper">
-                                    <p>Tra cứu thành công, tên tệp đã crawl là <span style={{ color: "green" }}>{nameFile}</span></p>
+                                    <p>Tra cứu thành công, tên tệp đã tra cứu là <span style={{ color: "green" }}>{nameFile}</span></p>
                                 </div>
                                 :
                                 null

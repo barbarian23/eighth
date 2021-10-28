@@ -26,7 +26,7 @@ export default function login(props) {
     }
 
     let history = useHistory();
-    let { isSomethingError, isLoginSuccess, loginError, logginin } = useSelector(state => state.login);
+    let { isSomethingError, isLoginSuccess, loginError, logginin, isGoHome } = useSelector(state => state.login);
 
     useEffect(() => {
         // dieu huong sang otp
@@ -35,6 +35,14 @@ export default function login(props) {
             history.push("/otp");
         }
     }, [isLoginSuccess]);
+
+    useEffect(() => {
+        // dieu huong sang home(trường hợp có tài khoản không cần otp)
+        console.log("is success go to home", isGoHome);
+        if (isGoHome) {
+            history.push("/home");
+        }
+    }, [isGoHome]);
 
     return (
         <div>

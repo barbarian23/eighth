@@ -50,7 +50,10 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         selector = "#btTraCuu"; // need to update
         await Promise.all([driver.click(selector)]);//, driver.waitForNavigation({ timeout: '61000' })
 
-        //await timer(2000);
+        await timer(200);
+
+        //khi bấm tra cứu, trang wbe cũng laod lại nên cần đợi ready state
+        await driver.waitForFunction('document.readyState === "complete"');
 
         //đợi cho đến khi iframe load xong data - là iframe đã load xong
 
@@ -60,8 +63,22 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         // let iframe = document.querySelector("#divIframe iframe");
         // return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTinh");
 
-        //đợi cho thanh laoding laod xong -> sẽ trở về trang thái display = none
-        await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#divLoading").style.display == "none"');
+        //đợi cho thanh laoding load xong -> sẽ trở về trang thái display = none
+        let loadingIndicate = await driver.evaluate('function getE(){' +
+            'let iframe = document.querySelector("#divIframe iframe");' +
+            'return iframe.contentWindow.document.querySelector("#divLoading") ? iframe.contentWindow.document.querySelector("#divLoading").style.display : "none"' +
+            '};' +
+            'getE();');
+
+        while (loadingIndicate != 'none') {
+            loadingIndicate = await driver.evaluate('function getE(){' +
+                'let iframe = document.querySelector("#divIframe iframe");' +
+                'return iframe.contentWindow.document.querySelector("#divLoading") ? iframe.contentWindow.document.querySelector("#divLoading").style.display : "none"' +
+                '};' +
+                'getE();');
+        }
+
+        //await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#divLoading").style.display == "none"');
 
         //lấy ra table result search - chỉ lấy phần row data
 
@@ -279,7 +296,7 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
 
         }
 
-        await timer(2000);
+        //await timer(2000);
         //thuê bao tham gia khuyến mại cần đợi 1-2 giây
 
         if (options.tbttkm) {
@@ -299,6 +316,156 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
             }
             col += 1;
         }
+
+        if (options.tieudung3thang) {
+
+
+            let link3thang = await driver.evaluate('function getE(){' +
+                'let iframe = document.querySelector("#divIframe iframe");' +
+                'return  iframe == null ? "" : iframe.contentWindow.document.querySelector("html body form#aspnetForm div.contain_popup div.p8 div#myScollbar div.title_containpopup div#menu.margint10.round-border div.activemenu.flyout.hidden div.surrounded div.boxmnr div.p10 div#CCBS.hiddencontent ul.items_menu_pagepopup li:nth-child(28)").innerHTML;' +
+                '};' +
+                'getE();');
+
+            console.log("link3thang", link3thang);
+            //
+            //document.querySelector("#divIframe iframe").contentWindow.document.querySelector("html body form#aspnetForm div.contain_popup div.p8 div#myScollbar div.title_containpopup div#menu.margint10.round-border div.activemenu.flyout.hidden div.surrounded div.boxmnr div.p10 div#CCBS.hiddencontent ul.items_menu_pagepopup li:nth-child(28) a")
+            let regex = /TraCuuLSTieuDung\.aspx\?\w*/g;
+            link3thang = link3thang.match(regex);
+
+            console.log("link3thang", link3thang);
+
+            if (link3thang && link3thang[0]) {
+
+                await driver.evaluate('function getE(){' +
+                    'let iframe = document.querySelector("#divIframe iframe");' +
+                    'if(iframe){' +
+                    'iframe.src="' + link3thang[0] + '";' +
+                    '}};' +
+                    'getE();');
+            }
+
+            await timer(200);
+
+            //đợi cho đến khi iframe load xong data - là iframe đã load xong
+            await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.readyState == "complete"');
+
+            //document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtSoThueBao").value = 3;
+
+            await driver.evaluate('function getE(){' +
+                'let iframe = document.querySelector("#divIframe iframe");' +
+                'if(iframe){' +
+                'iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtSoThueBao").value = ' + numberPhone + ';' +
+                '}};' +
+                'getE();');
+
+            //document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_ddlFromThangNam").selectedIndex = 3;
+
+            await driver.evaluate('function getE(){' +
+                'let iframe = document.querySelector("#divIframe iframe");' +
+                'if(iframe){' +
+                'iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_ddlFromThangNam").selectedIndex = 3;' +
+                '}};' +
+                'getE();');
+
+            //document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_btFind").click();
+            await driver.evaluate('function getE(){' +
+                'let iframe = document.querySelector("#divIframe iframe");' +
+                'if(iframe){' +
+                'iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_btFind").click()' +
+                '}};' +
+                'getE();');
+
+            await timer(200);
+            await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.readyState == "complete"');
+
+
+            //await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1").style.display == "none"');
+            console.log("tesst");
+            await timer(200);
+
+            let getIndicate = await driver.evaluate('function getE(){' +
+                'let iframe = document.querySelector("#divIframe iframe");' +
+                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1") ? iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1").style.display : ""' +
+                '};' +
+                'getE();');
+
+            while (loadingIndicate != 'none') {
+                getIndicate = await driver.evaluate('function getE(){' +
+                    'let iframe = document.querySelector("#divIframe iframe");' +
+                    'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1") ? iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1").style.display : ""' +
+                    '};' +
+                    'getE();');
+            }
+            console.log("go to 1");
+
+            //đợi cho đến khi iframe load xong data - là iframe đã load xong
+            await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.readyState == "complete"');
+            console.log("goto 2");
+            //document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_GrvDatas").innerHTML
+
+            let listtieudung3thang = await driver.evaluate('function getE(){' +
+                'let iframe = document.querySelector("#divIframe iframe");' +
+                'if(iframe){' +
+                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_GrvDatas").innerHTML' +
+                '}else{' +
+                'return "";' +
+                '}};' +
+                'getE();');
+
+            regex = /[<td][^>]+>[^<]+<\/td>/g;
+            let tieudung3thang = listtieudung3thang.match(regex);
+
+            console.log("tieudung3thang", tieudung3thang.length);
+            //tháng đầu tiên
+            //14 16 17 18 19 22
+            writeToXcell(worksheet, line, col, tieudung3thang[14], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[16], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[17], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[18], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[19], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[22], style);
+            col += 1;
+
+
+            //tháng thứ hai
+            //27 29 30 31 32 35
+            writeToXcell(worksheet, line, col, tieudung3thang[27], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[29], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[30], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[31], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[32], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[35], style);
+            col += 1;
+
+            //tháng thứ ba
+            //40 42 43 44 45 48
+            writeToXcell(worksheet, line, col, tieudung3thang[40], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[42], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[43], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[44], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[45], style);
+            col += 1;
+            writeToXcell(worksheet, line, col, tieudung3thang[48], style);
+            col += 1;
+
+        }
+
+
+
 
         // // gửi dữ liệu về client
         socket.send(SOCKET_WORKING_CRAWLED_ITEM_DATA, { index: index, phone: numberPhone });

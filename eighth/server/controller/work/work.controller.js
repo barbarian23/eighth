@@ -14,7 +14,7 @@ import { forEach } from "lodash";
 const puppeteer = require('puppeteer');
 //C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe
 //C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
-let exPath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+let exPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
 var driver, browser;
 
 //puppeteer
@@ -247,6 +247,52 @@ async function writeHeader(wb, ws, options) {
 
         if (options.tbttkm) {
             ws.cell(1, col).string("TBTT được TGKM").style(style);
+            col += 1;
+        }
+
+        if (options.tieudung3thang) {
+            //tháng đầu tiên
+            ws.cell(1, col).string("Tháng dữ liệu 1").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng thoại 1").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng SMS 1").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng DATA 1").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng VAS 1").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng TKC 1").style(style);
+            col += 1;
+
+            
+            //tháng thứ hai
+            ws.cell(1, col).string("Tháng dữ liệu 2").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng thoại 2").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng SMS 2").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng DATA 2").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng VAS 2").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng TKC 2").style(style);
+            col += 1;
+
+            
+            //tháng thứ ba
+            ws.cell(1, col).string("Tháng dữ liệu 3").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng thoại 3").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng SMS 3").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng DATA 3").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng VAS 3").style(style);
+            col += 1;
+            ws.cell(1, col).string("Tổng TKC 3").style(style);
             col += 1;
         }
     } catch (e) {

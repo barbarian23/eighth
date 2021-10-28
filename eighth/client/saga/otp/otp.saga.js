@@ -2,7 +2,7 @@ import { takeLatest, take, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import socketClient from "../../service/socket/socket.client.service";
 import { MAIN_URL, SOCKET_OTP, SOCKET_OTP_INCORRECT, SOCKET_OTP_STATUS, SOCKET_SOMETHING_ERROR } from '../../../common/constants/common.constants';
-import { OTP_CHECKING, OPEN_HOME_SCREEN, IS_OTP_VERIFYING, OTP_STATUS } from '../../action/otp/otp.action';
+import { OTP_CHECKING, OPEN_HOME_SCREEN, IS_OTP_VERIFYING, OTP_STATUS, OTP_TIMEOUT  } from '../../action/otp/otp.action';
 
 // connect to server
 const socket = new socketClient(MAIN_URL);

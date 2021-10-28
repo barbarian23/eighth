@@ -1,5 +1,5 @@
 import { LOGIN_URL, OTP_URL } from "../../constants/work/work.constants";
-import { SOCKET_SOMETHING_ERROR, SOCKET_LOGIN_INCORRECT, SOCKET_LOGIN_STATUS } from "../../../common/constants/common.constants";
+import { SOCKET_SOMETHING_ERROR, SOCKET_LOGIN_INCORRECT, SOCKET_LOGIN_STATUS, SOCKET_LOGIN_GO_HOME } from "../../../common/constants/common.constants";
 
 const DEFAULT_DELAY = 2000;
 
@@ -19,8 +19,8 @@ async function doLogin(username, password, socket, driver, driver2) {
         // go to login url
         await driver.goto(LOGIN_URL);
 
-        // wait to complete
-        //await driver.waitForFunction('document.readyState === "complete"'); // need open comment
+        // await to complete
+        // await driver.waitForFunction('document.readyState === "complete"'); // need open comment
 
         // select to username input & send username
         // let selector = "body #ctl01 .page .main .accountInfo #MainContent_LoginUser_UserName"; // need open comment
@@ -39,9 +39,9 @@ async function doLogin(username, password, socket, driver, driver2) {
 
         await timer(2000);
 
-        //lấy ra một DOM - tương đương hàm document.querySelector()
+        // lấy ra một DOM - tương đương hàm document.querySelector()
         // check trường hợp login wrong
-        //khi mà alert sai password hiện lên
+        // khi mà alert sai password hiện lên
 
         // driver.on("dialog", async (dialog) => {
         //     console.log("alert login", dialog.message());
@@ -61,13 +61,45 @@ async function doLogin(username, password, socket, driver, driver2) {
         //await driver.goto(OTP_URL);
         // wait to complete
 
-        await driver.evaluate("setInterval(()=>{document.querySelector('#txtOtp')},500)");
 
-        await driver.waitForFunction('document.querySelector("#txtOtp") != null');
+        //await driver.evaluate("setInterval(()=>{document.querySelector('#txtOtp')},500)");
 
-        //await driver2.goto(OTP_URL);
+        //let otpDOM = await driver.waitForFunction('document.querySelector("#txtOtp") != null');
 
-        socket.send(SOCKET_LOGIN_STATUS, { data: 1 });
+        
+
+        //nếu là tài khoản không cần otp, sẽ tự điều hướng tới trang home
+        await driver.waitForFunction('document.readyState === "complete"');
+
+        let otpDOM = await driver.$$eval("#txtOtp", spanData => spanData.map((span) => {
+            return span.innerHTML;
+        }));
+
+        let homeDOM = await driver.$$eval("#mainmenu", spanData => spanData.map((span) => {
+            return span.innerHTML;
+        }));
+
+        while(otpDOM.length == 0 && homeDOM.length == 0){
+            otpDOM = await driver.$$eval("#txtOtp", spanData => spanData.map((span) => {
+                return span.innerHTML;
+            }));
+    
+            homeDOM = await driver.$$eval("#mainmenu", spanData => spanData.map((span) => {
+                return span.innerHTML;
+            }));
+            await timer(500);
+        }
+
+        console.log("otpDOM",otpDOM.lenght);
+        console.log("homeDOM",homeDOM.lenght);
+
+        if(otpDOM.length > 0){//otp
+            socket.send(SOCKET_LOGIN_STATUS, { data: 1 });
+        }else if(homeDOM.length > 0){//home
+            socket.send(SOCKET_LOGIN_GO_HOME, { data: 3 });
+        }
+    
+        //socket.send(SOCKET_LOGIN_STATUS, { data: 1 });
 
     } catch (e) {
         console.log("Login Error", e);

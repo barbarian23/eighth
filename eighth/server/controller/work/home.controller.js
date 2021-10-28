@@ -388,14 +388,17 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
                 'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1") ? iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1").style.display : ""' +
                 '};' +
                 'getE();');
-
+            console.log("getIndicate", getIndicate);
             while (loadingIndicate != 'none') {
+                console.log("getIndicate", getIndicate);
                 getIndicate = await driver.evaluate('function getE(){' +
                     'let iframe = document.querySelector("#divIframe iframe");' +
                     'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1") ? iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1").style.display : ""' +
                     '};' +
                     'getE();');
+                console.log("getIndicate", getIndicate);
             }
+
             console.log("go to 1");
 
             //đợi cho đến khi iframe load xong data - là iframe đã load xong

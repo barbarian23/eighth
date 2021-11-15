@@ -1,6 +1,6 @@
 import { HOME_URL } from "../../constants/work/work.constants";
 import { SOCKET_WORKING_CRAWLED_ITEM_DATA } from "../../../common/constants/common.constants";
-import { getListTdInformation, getTdInformation } from "../../service/util/utils.server";
+import { getListTdInformation, getTdInformation, getNumberInScript } from "../../service/util/utils.server";
 const DEFAULT_DELAY = 2000;
 
 /**
@@ -87,9 +87,17 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         let col = 2;
         col += 1;
         if (options.trangthaigoidi) {
-            let trangthaigoidi = await driver.evaluate('function getE(){' +
+            let trangthaigoidi = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_chkGoiDi").checked;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_chkGoiDi");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_chkGoiDi");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.checked : "";' +
                 '};' +
                 'getE();');
             console.log("trangthaigoidi", trangthaigoidi);
@@ -99,9 +107,17 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         }
 
         if (options.trangthaigoiden) {
-            let trangthaigoiden = await driver.evaluate('function getE(){' +
+            let trangthaigoiden = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_chkGoiDen").checked;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_chkGoiDen");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_chkGoiDen");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.checked : "";' +
                 '};' +
                 'getE();');
             console.log("trangthaigoiden", trangthaigoiden);
@@ -111,9 +127,17 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         }
 
         if (options.tenthuebao) {
-            let tenthuebao = await driver.evaluate('function getE(){' +
+            let tenthuebao = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTB").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTB");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTB");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
             console.log("tenthuebao", tenthuebao);
@@ -122,9 +146,17 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         }
 
         if (options.tinh) {
-            let tinh = await driver.evaluate('function getE(){' +
+            let tinh = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTinh").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTinh");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTinh");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
             console.log("tinh", tinh);
@@ -134,131 +166,244 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         }
 
         if (options.IMSI) {
-            let IMSI = await driver.evaluate('function getE(){' +
+            let IMSI = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtIMSI").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtIMSI");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtIMSI");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
+                console.log("IMSI", IMSI);
 
             writeToXcell(worksheet, line, col, IMSI, style);
             col += 1;
         }
 
         if (options.ngaysinh) {
-            let ngaysinh = await driver.evaluate('function getE(){' +
+            let ngaysinh = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtNgaySinh").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtNgaySinh");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtNgaySinh");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
+                console.log("ngaysinh", ngaysinh);
 
             writeToXcell(worksheet, line, col, ngaysinh, style);
             col += 1;
         }
 
         if (options.sogt) {
-            let sogt = await driver.evaluate('function getE(){' +
+            let sogt = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtSoGT").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtSoGT");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtSoGT");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
+                console.log("sogt", sogt);
 
             writeToXcell(worksheet, line, col, sogt, style);
             col += 1;
         }
 
         if (options.ngaycap) {
-            let ngaycap = await driver.evaluate('function getE(){' +
+            let ngaycap = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtNoiCap").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtNoiCap");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtNoiCap");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
+                console.log("ngaycap", ngaycap);
 
             writeToXcell(worksheet, line, col, ngaycap, style);
             col += 1;
         }
 
         if (options.sopin) {
-            let sopin = await driver.evaluate('function getE(){' +
+            let sopin = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPIN").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPIN");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPIN");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
+                console.log("sopin2", sopin);
 
             writeToXcell(worksheet, line, col, sopin, style);
             col += 1;
         }
 
         if (options.sopuk) {
-            let sopuk = await driver.evaluate('function getE(){' +
+            let sopuk = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPUK").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPUK");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPUK");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
+                console.log("sopin2", sopuk);
 
             writeToXcell(worksheet, line, col, sopuk, style);
             col += 1;
         }
 
         if (options.sopin2) {
-            let sopin2 = await driver.evaluate('function getE(){' +
+            let sopin2 = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPIN2").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPIN2");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPIN2");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
+                console.log("sopin2", sopin2);
 
             writeToXcell(worksheet, line, col, sopin2, style);
             col += 1;
         }
 
         if (options.sopuk2) {
-            let sopuk2 = await driver.evaluate('function getE(){' +
+            let sopuk2 = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPUK2").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPUK2");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtPUK2");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
+                console.log("sopuk2", sopuk2);
 
             writeToXcell(worksheet, line, col, sopuk2, style);
             col += 1;
         }
 
         if (options.dcthuongtru) {
-            let dcthuongtru = await driver.evaluate('function getE(){' +
+            let dcthuongtru = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtDiaChiThuongTru").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtDiaChiThuongTru");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtDiaChiThuongTru");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
+                console.log("dcthuongtru", dcthuongtru);
 
             writeToXcell(worksheet, line, col, dcthuongtru, style);
             col += 1;
         }
 
         if (options.taikhoanchinh) {
-            let taikhoanchinh = await driver.evaluate('function getE(){' +
+            let taikhoanchinh = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTKC").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTKC");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTKC");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
 
+                console.log("taikhoanchinh", taikhoanchinh);
             writeToXcell(worksheet, line, col, taikhoanchinh, style);
             col += 1;
         }
 
         if (options.hansudung) {
-            let hansudung = await driver.evaluate('function getE(){' +
+            let hansudung = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtHSD").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtHSD");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtHSD");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
+                console.log("hansudung", hansudung);
             writeToXcell(worksheet, line, col, hansudung, style);
             col += 1;
         }
 
-        await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTKC").innerHTML != "..."');
+        //await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtTKC").innerHTML != "..."');
 
         if (options.hanghoivien) {
-            let hanghoivien = await driver.evaluate('function getE(){' +
+            let hanghoivien = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_lblHangHoiVien").innerHTML;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_lblHangHoiVien");' +
+                'let rank=null;'+
+                'let rTry = 0;' +
+                'while(!rank && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_lblHangHoiVien");' +
+                'if(doM){'+
+                'if(doM.innerHTML != "..."){'+
+                'rank=doM.innerHTML;'+
+                '}'+
+                '}'+
+                'rTry++;' +
+                '}' +
+                'return rank ? rank : "";' +
                 '};' +
                 'getE();');
 
@@ -268,10 +413,17 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         }
 
         if (options.notruocdo) {
-            let notruocdo = await driver.evaluate('function getE(){' +
+            let notruocdo = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'let tA = iframe.contentWindow.document.querySelector("#tblThongTinCuocTraSau");' +
-                'return tA == null ? "" : tA.innerHTML;' +
+                'let doM = iframe.contentWindow.document.querySelector("#tblThongTinCuocTraSau");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#tblThongTinCuocTraSau");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.innerHTML : "";' +
                 '};' +
                 'getE();');
 
@@ -287,6 +439,7 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
             if (notruocdo != "") {
                 let listTdTag = getListTdInformation(notruocdo);
                 let no = getTdInformation(listTdTag[17]);
+                console.log("notruocdo", no);
                 writeToXcell(worksheet, line, col, no, style);
 
             } else {
@@ -300,13 +453,20 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         //thuê bao tham gia khuyến mại cần đợi 1-2 giây
 
         if (options.tbttkm) {
-            let tbttkm = await driver.evaluate('function getE(){' +
+            let tbttkm = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'let tA = document.querySelector("#divIframe iframe");' +
-                'return  tA == null ? "" : iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtKhuyenMai").value;' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtKhuyenMai");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtKhuyenMai");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.value : "";' +
                 '};' +
                 'getE();');
-
+                console.log("tbttkm", tbttkm);
             //bay dùng SON.stringify là chuẩn rồi
             //nhưng mà hiện tại hàm  bên trên tao viết lại vì web nó dùng iframe return về string nên không cần dùng JSON.stringify
             if (tbttkm != "") {
@@ -318,18 +478,24 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
         }
 
         if (options.tieudung3thang) {
-
-
-            let link3thang = await driver.evaluate('function getE(){' +
+            let link3thang = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'return  iframe == null ? "" : iframe.contentWindow.document.querySelector("html body form#aspnetForm div.contain_popup div.p8 div#myScollbar div.title_containpopup div#menu.margint10.round-border div.activemenu.flyout.hidden div.surrounded div.boxmnr div.p10 div#CCBS.hiddencontent ul.items_menu_pagepopup li:nth-child(28)").innerHTML;' +
+                'let doM = iframe.contentWindow.document.querySelector("html body form#aspnetForm div.contain_popup div.p8 div#myScollbar div.title_containpopup div#menu.margint10.round-border div.activemenu.flyout.hidden div.surrounded div.boxmnr div.p10 div#CCBS.hiddencontent ul.items_menu_pagepopup li:nth-child(28)");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("html body form#aspnetForm div.contain_popup div.p8 div#myScollbar div.title_containpopup div#menu.margint10.round-border div.activemenu.flyout.hidden div.surrounded div.boxmnr div.p10 div#CCBS.hiddencontent ul.items_menu_pagepopup li:nth-child(28)");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.innerHTML : "";' +
                 '};' +
                 'getE();');
 
             console.log("link3thang", link3thang);
             //
             //document.querySelector("#divIframe iframe").contentWindow.document.querySelector("html body form#aspnetForm div.contain_popup div.p8 div#myScollbar div.title_containpopup div#menu.margint10.round-border div.activemenu.flyout.hidden div.surrounded div.boxmnr div.p10 div#CCBS.hiddencontent ul.items_menu_pagepopup li:nth-child(28) a")
-            let regex = /TraCuuLSTieuDung\.aspx\?\w*/g;
+            let regex = /TraCuuLSTieuDung\.aspx\?[^']*/g;
             link3thang = link3thang.match(regex);
 
             console.log("link3thang", link3thang);
@@ -342,7 +508,7 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
                     'iframe.src="' + link3thang[0] + '";' +
                     '}};' +
                     'getE();');
-            }
+           
 
             await timer(200);
 
@@ -351,29 +517,61 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
 
             //document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtSoThueBao").value = 3;
 
-            await driver.evaluate('function getE(){' +
-                'let iframe = document.querySelector("#divIframe iframe");' +
-                'if(iframe){' +
-                'iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtSoThueBao").value = ' + numberPhone + ';' +
-                '}};' +
-                'getE();');
+            await driver.evaluate('async function getE(){' +
+            'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};'+
+            'let iframe = document.querySelector("#divIframe iframe");' +
+            'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtSoThueBao");' +
+            'let rTry = 0;'+
+            'while(!doM && rTry == 50){'+
+            'await timer(200);'+
+            'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_txtSoThueBao");'+
+            'rTry++;'+
+            '}'+
+            'if(doM){' +
+            'doM.value = ' + numberPhone + ';' +
+            '}};' +
+            'getE();');
 
             //document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_ddlFromThangNam").selectedIndex = 3;
 
-            await driver.evaluate('function getE(){' +
-                'let iframe = document.querySelector("#divIframe iframe");' +
-                'if(iframe){' +
-                'iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_ddlFromThangNam").selectedIndex = 3;' +
-                '}};' +
-                'getE();');
+            await driver.evaluate('async function getE(){' +
+            'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};'+
+            'let iframe = document.querySelector("#divIframe iframe");' +
+            'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_ddlFromThangNam");' +
+            'let rTry = 0;'+
+            'let selectCheck = false;'+
+            'while(!selectCheck && rTry == 50){'+
+            'await timer(200);'+
+            'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_ddlFromThangNam");'+
+            'if(doM){' +
+            'console.log("doM.selectedIndex",doM.selectedIndex);'+
+            'if(doM.selectedIndex != 3){'+
+            'doM.selectedIndex = 3;' +
+            '}else{'+
+            'selectCheck = true;'+ 
+            '}'+
+            '}'+
+            'rTry++;'+
+            '}'+
+            '};' +
+            'getE();');
 
             //document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_btFind").click();
-            await driver.evaluate('function getE(){' +
-                'let iframe = document.querySelector("#divIframe iframe");' +
-                'if(iframe){' +
-                'iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_btFind").click()' +
-                '}};' +
-                'getE();');
+            await driver.evaluate('async function getE(){' +
+            'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};'+
+            'let iframe = document.querySelector("#divIframe iframe");' +
+            'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_btFind");' +
+            'let rTry = 0;'+
+            'while(!doM && rTry == 50){'+
+            'await timer(200);'+
+            'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_btFind");'+
+            'rTry++;'+
+            '}'+
+            'if(doM){' +
+            'console.log("click");'+
+            'doM.click();' +
+            '}};' +
+            'getE();'	);
 
             await timer(200);
             await driver.waitForFunction('document.querySelector("#divIframe iframe").contentWindow.document.readyState == "complete"');
@@ -388,15 +586,16 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
                 'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1") ? iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1").style.display : ""' +
                 '};' +
                 'getE();');
+
             console.log("getIndicate", getIndicate);
-            while (loadingIndicate != 'none') {
-                console.log("getIndicate", getIndicate);
+            while (getIndicate != 'none') {
+                //console.log("getIndicate", getIndicate);
                 getIndicate = await driver.evaluate('function getE(){' +
                     'let iframe = document.querySelector("#divIframe iframe");' +
                     'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1") ? iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_UpdateProgress1").style.display : ""' +
                     '};' +
                     'getE();');
-                console.log("getIndicate", getIndicate);
+                //console.log("getIndicate", getIndicate);
             }
 
             console.log("go to 1");
@@ -406,67 +605,75 @@ async function doGetInfomation(line, numberPhone, index, options, month, workshe
             console.log("goto 2");
             //document.querySelector("#divIframe iframe").contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_GrvDatas").innerHTML
 
-            let listtieudung3thang = await driver.evaluate('function getE(){' +
+            let listtieudung3thang = await driver.evaluate('async function getE(){' +
+                'function timer(ms){return new Promise((res)=>setTimeout(res,ms))};' +
                 'let iframe = document.querySelector("#divIframe iframe");' +
-                'if(iframe){' +
-                'return iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_GrvDatas").innerHTML' +
-                '}else{' +
-                'return "";' +
-                '}};' +
+                'let doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_GrvDatas");' +
+                'let rTry = 0;' +
+                'while(!doM && rTry == 50){' +
+                'await timer(200);' +
+                'doM = iframe.contentWindow.document.querySelector("#ctl00_ContentPlaceHolder1_GrvDatas");' +
+                'rTry++;' +
+                '}' +
+                'return doM ? doM.innerHTML : "";' +
+                '};' +
                 'getE();');
 
             regex = /[<td][^>]+>[^<]+<\/td>/g;
             let tieudung3thang = listtieudung3thang.match(regex);
 
-            console.log("tieudung3thang", tieudung3thang.length);
-            //tháng đầu tiên
-            //14 16 17 18 19 22
-            writeToXcell(worksheet, line, col, tieudung3thang[14], style);
-            col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[16], style);
-            col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[17], style);
-            col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[18], style);
-            col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[19], style);
-            col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[22], style);
-            col += 1;
+            console.log("tieudung3thang 1", tieudung3thang.length);
+            // console.log("tieudung3thang 1", tieudung3thang[1],tieudung3thang[3],tieudung3thang[4],tieudung3thang[5],tieudung3thang[6],tieudung3thang[9]);
+            // console.log("tieudung3thang 2", tieudung3thang[14],tieudung3thang[16],tieudung3thang[17],tieudung3thang[18],tieudung3thang[19],tieudung3thang[22]);
+            // console.log("tieudung3thang 3", tieudung3thang[27],tieudung3thang[29],tieudung3thang[30],tieudung3thang[31],tieudung3thang[32],tieudung3thang[35]);
 
+            //tháng đầu tiên
+            //1 3 4 5 6 9
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[1]), style);
+            col += 1;
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[3]), style);
+            col += 1;
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[4]), style);
+            col += 1;
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[5]), style);
+            col += 1;
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[6]), style);
+            col += 1;
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[9]), style);
+            col += 1;
 
             //tháng thứ hai
-            //27 29 30 31 32 35
-            writeToXcell(worksheet, line, col, tieudung3thang[27], style);
+            //14 16 17 18 19 22
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[14]), style);
             col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[29], style);
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[16]), style);
             col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[30], style);
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[17]), style);
             col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[31], style);
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[18]), style);
             col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[32], style);
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[19]), style);
             col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[35], style);
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[22]), style);
             col += 1;
+
 
             //tháng thứ ba
-            //40 42 43 44 45 48
-            writeToXcell(worksheet, line, col, tieudung3thang[40], style);
+            //27 29 30 31 32 35
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[27]), style);
             col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[42], style);
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[29]), style);
             col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[43], style);
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[30]), style);
             col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[44], style);
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[31]), style);
             col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[45], style);
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[32]), style);
             col += 1;
-            writeToXcell(worksheet, line, col, tieudung3thang[48], style);
+            await writeToXcell(worksheet, line, col, getNumberInScript(tieudung3thang[35]), style);
             col += 1;
-
         }
-
+    }
 
 
 

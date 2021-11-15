@@ -28,6 +28,16 @@ export const getListNumberMoney = paragraph => {
     }
 }
 
+export const getNumberInScript = paragraph => {
+    try {
+        var regex = /<[^>]+>/g;
+        return paragraph.replace(regex, "");
+    } catch (e) {
+        console.log("getNumberInScript error", e);
+        return [""];
+    }
+}
+
 export const verifyNumberPhone = paragraph => {
     try {
         var regex = /[^0][\d]+/g;

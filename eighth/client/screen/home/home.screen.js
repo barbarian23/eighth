@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import '../../assets/css/home/home.css';
 import '../../assets/css/home/home.style.css';
-import { TR_TYPE_SETUP, TR_TYPE_TIME } from "../../constants/home/home.constant";
-import { GET_LENGHT_LIST, START_CRAWL_DATA, SET_LIST_PHONE } from "../../action/home/home.action";
+import { TR_TYPE_SETUP, TR_TYPE_TIME, BUTTON_CRAWL_PAUSE, BUTTON_CRAWL_CONTINUE } from "../../constants/home/home.constant";
+import { GET_LENGHT_LIST, START_CRAWL_DATA, SET_LIST_PHONE, CRAWLED_PAUSE } from "../../action/home/home.action";
 import { readFileExcel } from "../../service/excel/excel.client.service";
 import { useSelector, useDispatch } from 'react-redux';
 import '../../assets/css/home/rc-checkbox.css';
@@ -13,6 +13,8 @@ export default function Home() {
     const [nameFile, setNameFile] = useState("");
     const [onBoarding, setOnBoarding] = useState(false);
     const [chooseFile, setChooseFile] = useState(false);
+
+    const [isStop, setisStop] = useState(false);
 
     const [trangthaigoidi, settrangthaigoidi] = useState(true);
     const [trangthaigoiden, settrangthaigoiden] = useState(true);
@@ -67,7 +69,7 @@ export default function Home() {
                     tlistPhone.push(itemPhone);
                 }
                 if (index == (data.length - 1)) {
-                    console.log("data - endoflist", item[0], " ", item[1], " listPhone", tlistPhone);
+                    console.log("data - endoflist", item[0], " ", item[1], " listPhone", tlistPhone.length);
                     //pay quên chưa đẩy list phone vào reducer, nên lần đầu khi bấm tra cứu thì danh sách ;lít phone bị rỗng
                     dispatch({ type: SET_LIST_PHONE, data: { listPhone: tlistPhone } });
                     return;
@@ -119,6 +121,13 @@ export default function Home() {
             setWarning(true);
         }
 
+    }
+
+    let setStop  = () => {
+        setisStop(prevStop => !prevStop);
+        // dispatch({
+        //     type: CRAWLED_PAUSE, data: { isStop: isStop }
+        // });
     }
 
     let percentProcess = (index, sum) => {
@@ -433,6 +442,9 @@ export default function Home() {
             {
                 isTracking ?
                     <div>
+                        {/* <div className="tracking-index-number-upper">
+                            <input className="input-add-button" type="button" value={isStop ? BUTTON_CRAWL_PAUSE : BUTTON_CRAWL_CONTINUE } onClick={setStop} />
+                        </div> */}
                         <div className="animation-tracking">
                             <div className="crawl-loading-parent" id="div_loginin_loading">
                                 <div className="crawl-login-loading">

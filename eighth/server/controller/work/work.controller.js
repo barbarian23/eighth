@@ -4,7 +4,8 @@ import {
     SOCKET_LOGIN,
     SOCKET_OTP,
     SOCKET_WORKING_START_CRAWL_DATA,
-    SOCKET_CRAWLED_DONE
+    SOCKET_CRAWLED_DONE,
+    SOCKET_CRAWLED_PAUSE
 } from "../../../common/constants/common.constants";
 import doLogin from "../work/login.controller";
 import doOTPChecking from "../work/otp.controller";
@@ -14,8 +15,9 @@ import { forEach } from "lodash";
 const puppeteer = require('puppeteer');
 //C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe
 //C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
-let exPath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+let exPath = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
 var driver, browser;
+var isStop = false;
 
 //puppeteer
 //socket
@@ -64,10 +66,23 @@ const workingController = async function (server) {
 
             //tra cứu số
             receive.on(SOCKET_WORKING_START_CRAWL_DATA, doGetInfor);
+
+            //pause
+            receive.on(SOCKET_CRAWLED_PAUSE, doPause);
         });
     } catch (e) {
         console.error("loi puppteer hoac socket", e);
 
+    }
+}
+
+//pause
+const doPause = async function () {
+    try {
+        console.log("doPause", data.isStop);
+        isStop = data.isStop;
+    } catch (e) {
+        console.log("doPause error ", e);
     }
 }
 
@@ -112,11 +127,17 @@ const doGetInfor = async function (data) { // crawl data in table
         });
         //chekc xem line có bị undefined hay không
         line = line ? line : 2;
-        let dOption = {...data.data};
+        let dOption = { ...data.data };
         for (let index = 0; index < data.listPhone.length; index++) {
             console.log("Tra cuu so thu ", index, " phone ", data.listPhone[index], "line", line);
             let today = new Date();
             //option nằm trong data.data
+
+            if (isStop == true) {
+                index--;
+                console.log("tam dung");
+                continue;
+            }
 
             let tempLine = await doGetInfomation(line, data.listPhone[index].phone, data.listPhone[index].index, dOption, today.getFullYear() + '-' + (today.getMonth() + 1), ws, socket, driver, data.listPhone.length, style);
             line = tempLine;
@@ -265,7 +286,7 @@ async function writeHeader(wb, ws, options) {
             ws.cell(1, col).string("Tổng TKC 1").style(style);
             col += 1;
 
-            
+
             //tháng thứ hai
             ws.cell(1, col).string("Tháng dữ liệu 2").style(style);
             col += 1;
@@ -280,7 +301,7 @@ async function writeHeader(wb, ws, options) {
             ws.cell(1, col).string("Tổng TKC 2").style(style);
             col += 1;
 
-            
+
             //tháng thứ ba
             ws.cell(1, col).string("Tháng dữ liệu 3").style(style);
             col += 1;

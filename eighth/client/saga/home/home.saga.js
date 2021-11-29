@@ -4,14 +4,16 @@ import { homeConstant } from "../../constants/home/home.constant";
 import {
     START_CRAWL_DATA,
     GET_NUMBER_INFORMATION,
-    GET_NUMBER_INFORMATION_SUCCESS
+    GET_NUMBER_INFORMATION_SUCCESS,
+    CRAWLED_PAUSE
 } from "../../action/home/home.action";
 import socketClient from "../../service/socket/socket.client.service";
 import {
     SOCKET_WORKING_START_CRAWL_DATA,
     SOCKET_WORKING_CRAWLED_ITEM_DATA,
     MAIN_URL,
-    SOCKET_CRAWLED_DONE
+    SOCKET_CRAWLED_DONE,
+    SOCKET_CRAWLED_PAUSE
 } from "../../../common/constants/common.constants";
 
 const socket = new socketClient(MAIN_URL);
@@ -21,8 +23,8 @@ const socket = new socketClient(MAIN_URL);
 const startCrawlDataSocket = function (data) {
     console.log("startCrawlDataSocket", data.data);
     return eventChannel(emitter => {
-        console.log("start send", { listPhone: data.data.listPhone, nameFile: data.data.nameFile, time:data.data.time, data: data.data});
-        socket.send(SOCKET_WORKING_START_CRAWL_DATA, { listPhone: data.data.listPhone, nameFile: data.data.nameFile, time:data.data.time, data: data.data});
+        console.log("start send", { listPhone: data.data.listPhone, nameFile: data.data.nameFile, time: data.data.time, data: data.data });
+        socket.send(SOCKET_WORKING_START_CRAWL_DATA, { listPhone: data.data.listPhone, nameFile: data.data.nameFile, time: data.data.time, data: data.data });
         socket.receive(SOCKET_WORKING_CRAWLED_ITEM_DATA, function (data) {
             console.log("crawl item home.saga from server", data);
             emitter(data || '');
@@ -39,7 +41,7 @@ const startCrawlDataSocket = function (data) {
 // Nhận kết quả từ socket
 const startCrawlData = function* (action) {
     //lay vee fkeest quar cuar event channel redux
-    console.log("startCrawlData",action);
+    console.log("startCrawlData", action);
     let result = yield call(startCrawlDataSocket, action);
     yield put({
         type: GET_NUMBER_INFORMATION_SUCCESS,
@@ -66,6 +68,33 @@ const startCrawlData = function* (action) {
 
 }
 
+//pause function
+const doPause = function* (data) {
+    console.log("doPause", data);
+    return eventChannel(
+        (emitter) => {
+            socket.send(SOCKET_CRAWLED_PAUSE, { isStop: data.data.isStop });
+
+            return () => {
+
+            }
+        });
+}
+
+const startDoPause = function* startDoPause(action) {
+    console.log("startDoPause", action);
+    let result = yield call(doPause, action);
+
+    // ket qua cua socket
+    while (true) {
+        let responce = yield take(result);
+        if (responce) {
+            console.log("doPause", action);
+        }
+    }
+}
+
 export const watchHome = function* () {
     yield takeLatest(START_CRAWL_DATA, startCrawlData);
+    yield takeLatest(CRAWLED_PAUSE, startDoPause);
 }

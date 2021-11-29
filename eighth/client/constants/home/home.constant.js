@@ -21,6 +21,8 @@ export const TR_TYPE_ADD = "Thêm";
 
 export const TR_TYPE_TIME = "Nhập khoảng thời gian tra cứu (s)";
 export const TR_TYPE_SETUP = "Tra cứu";
+export const BUTTON_CRAWL_PAUSE = "Tạm dừng";
+export const BUTTON_CRAWL_CONTINUE = "Tiếp tục";
 
 export const sampleData = [
     {

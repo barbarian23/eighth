@@ -35,3 +35,5 @@ export const GET_LENGHT_LIST = "GET_LENGHT_LIST";
 
 
 export const SET_LIST_PHONE = "SET_LIST_PHONE";
+
+export const CRAWLED_PAUSE = "CRAWLED_PAUSE";

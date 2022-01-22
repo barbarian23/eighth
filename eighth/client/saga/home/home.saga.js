@@ -15,8 +15,11 @@ import {
     SOCKET_CRAWLED_DONE,
     SOCKET_CRAWLED_PAUSE
 } from "../../../common/constants/common.constants";
+import { PortClient } from "../../service/util/port.client";
 
-const socket = new socketClient(MAIN_URL);
+let SOCKET_URL =  PortClient.getInstance().getPort(); 
+
+const socket = new socketClient(SOCKET_URL);
 
 // sử dụng eventChannel để gửi và nhận data qua socket
 // 

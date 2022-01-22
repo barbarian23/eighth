@@ -4,10 +4,13 @@ import { LOGIN, OPEN_OTP_SCREEN, LOGIN_ERROR, LOGGINGIN, GO_TO_HOME } from "../.
 import { LOGIN_STATUS_TEXT } from "../../constants/login/login.constant";
 import { loginConstant } from "../../constants/login/login.constant";
 import socketClient from "../../service/socket/socket.client.service";
+import { PortClient } from "../../service/util/port.client";
 import { SOCKET_LOGIN, MAIN_URL, SOCKET_LOGIN_INCORRECT, SOCKET_LOGIN_STATUS, SOCKET_SOMETHING_ERROR, SOCKET_LOGIN_GO_HOME } from "../../../common/constants/common.constants";
 
+let SOCKET_URL =  PortClient.getInstance().getPort(); 
+
 // connect to server
-const socket = new socketClient(MAIN_URL);
+const socket = new socketClient(SOCKET_URL);
 
 const loginSocket = function (data) {
     console.log("loginSocket", data);

@@ -9,6 +9,7 @@ import rootSaga from "./saga/rootSaga";
 import rootReducer from "./reducer/rootReducer";
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
+import { PortClient } from "./service/util/port.client";
 
 // Grab the state from a global variable injected into the server-generated HTML
 const preloadedState = window.__PRELOADED_STATE__;
@@ -22,6 +23,10 @@ const store = createStore(rootReducer, preloadedState, applyMiddleware(sagaMiddl
 sagaMiddleware.run(rootSaga);
 
 class Client extends React.Component {
+    componentDidMount(){
+        PortClient.getInstance().setPort(window.location.href);
+    }
+
     render() {
         return (
             <BrowserRouter>

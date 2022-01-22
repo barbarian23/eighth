@@ -53,8 +53,8 @@
   <script>
     window.$ = window.jQuery = require("./node_modules/jquery/dist/jquery.min.js");
 
-    const { ipcRenderer } = require("electron"),
-      expressAppUrl = "http://localhost:8297",
+
+    const { ipcRenderer, remote } = require("electron"),
       //spawn = require("child_process").spawn,
 
       app = require('electron').remote.app,
@@ -65,7 +65,7 @@
           stdio: ["pipe", "pipe", "pipe", "ipc"]
         }
       )
-      request = require("request"),
+    request = require("request"),
       _ = require("lodash"),
       //$serverLog = $("#serverLog"),
       $expressApp = $("#expressApp"),
@@ -81,11 +81,11 @@
 
     ipcRenderer.on("show-server-log", (event, data) => {
       //if ($serverLog.css("display") === "none") {
-        //$serverLog.css("display", "block");
-        //$expressApp.addClass("expressAppHide");
+      //$serverLog.css("display", "block");
+      //$expressApp.addClass("expressAppHide");
       //} else {
-        //$expressApp.removeClass("expressAppHide");
-        //$serverLog.css("display", "none");
+      //$expressApp.removeClass("expressAppHide");
+      //$serverLog.css("display", "none");
       //}
     });
 
@@ -107,7 +107,7 @@
         _.forEach(lines, l => {
           if (l !== "") {
             //$serverLog.append(strip(l) + "<br/>");
-            console.log("[SERVER LOG]",strip(l));
+            console.log("[SERVER LOG]", strip(l));
           }
         });
 
@@ -118,7 +118,15 @@
     redirectOutput(node.stdout);
     redirectOutput(node.stderr);
 
+    //prevent sending too much
+    const checkport = -1;
+
     let checkServerRunning = setInterval(() => {
+        const fs = require('fs');
+        const PORT = fs.readFileSync('port.txt',
+          { encoding: 'utf8', flag: 'r' });
+        const expressAppUrl = `http://localhost:${PORT}`;
+        console.log(PORT);
       request(expressAppUrl, (error, response, body) => {
         if (!error && response.statusCode == 200) {
           $expressApp.attr("src", expressAppUrl);
@@ -127,7 +135,7 @@
           clearInterval(checkServerRunning);
         }
       });
-    }, 1000);
+    }, 1500);
   </script>
 </body>
 

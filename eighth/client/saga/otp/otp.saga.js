@@ -3,9 +3,11 @@ import { eventChannel } from 'redux-saga';
 import socketClient from "../../service/socket/socket.client.service";
 import { MAIN_URL, SOCKET_OTP, SOCKET_OTP_INCORRECT, SOCKET_OTP_STATUS, SOCKET_SOMETHING_ERROR } from '../../../common/constants/common.constants';
 import { OTP_CHECKING, OPEN_HOME_SCREEN, IS_OTP_VERIFYING, OTP_STATUS, OTP_TIMEOUT  } from '../../action/otp/otp.action';
+import { PortClient } from "../../service/util/port.client";
 
+let SOCKET_URL =  PortClient.getInstance().getPort(); 
 // connect to server
-const socket = new socketClient(MAIN_URL);
+const socket = new socketClient(SOCKET_URL);
 
 const otpSocket = function (data) {
     console.log("otpSocket", data);

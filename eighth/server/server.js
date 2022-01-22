@@ -5,10 +5,20 @@ import express from "express";
 import path from "path";
 import router from "./router/main.router";
 import cors from "cors";
-import { PORT } from "../common/constants/common.constants";
+//import { PORT } from "../common/constants/common.constants";
 import workingController from "./controller/work/work.controller";
-
 const app = express();
+const fs = require('fs')
+const PORT = Math.floor(Math.random() * 48000) + 10000;
+console.log("PORT is",PORT);
+
+fs.writeFile('port.txt', PORT + "", err => {
+  if (err) {
+    console.error(err)
+    return
+  }
+})
+
 app.set('port', PORT);
 
 // app.use(compression());
@@ -43,4 +53,4 @@ const server = http.createServer(app);
 
 workingController(server);
 
-server.listen(app.get('port'), () => console.log("######## app running on port " + PORT + " ########"));
+server.listen(app.get('port'), () => console.log("######## app running on  http://localhost:" + PORT + " ########"));
